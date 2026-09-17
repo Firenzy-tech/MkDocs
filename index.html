@@ -51,6 +51,8 @@
       
     
     
+      <link rel="stylesheet" href="stylesheets/diagrams.css">
+    
     <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -937,17 +939,21 @@
 <hr />
 <h2 id="que-arquitectura-elegir-guia-rapida">🧭 ¿Qué arquitectura elegir? (Guía Rápida)</h2>
 <pre class="mermaid"><code>graph TD
-    A["¿Cuál es la prioridad de tu proyecto?"] --&gt; B{"¿Equipo pequeño / Fase inicial / Validando negocio?"}
-    A --&gt; C{"¿Escalado masivo de equipos (&gt;50 devs) o dominios independientes?"}
-    A --&gt; D{"¿Cargas de trabajo intermitentes o procesamiento asíncrono masivo?"}
+    A["🎯 ¿Cuál es el estado o prioridad de tu proyecto?"] --&gt; B{"¿Equipo pequeño / Fase inicial / Validando modelo?"}
+    A --&gt; C{"¿Gran escala de equipos (&gt;30 devs) o dominios independientes?"}
+    A --&gt; D{"¿Picos impredecibles o tareas por eventos esporádicos?"}
 
-    B -- Sí --&gt; M1["&lt;b&gt;Recomendado:&lt;/b&gt; &lt;a href='monolito-modular'&gt;Monolito Modular&lt;/a&gt;&lt;br/&gt;+ &lt;a href='arquitectura-hexagonal'&gt;Arquitectura Hexagonal&lt;/a&gt;"]
-    C -- Sí --&gt; M2["&lt;b&gt;Recomendado:&lt;/b&gt; &lt;a href='microservicios'&gt;Microservicios&lt;/a&gt;&lt;br/&gt;+ &lt;a href='event-driven'&gt;Orientada a Eventos (EDA)&lt;/a&gt;"]
-    D -- Sí --&gt; M3["&lt;b&gt;Recomendado:&lt;/b&gt; &lt;a href='arquitectura-serverless'&gt;Arquitectura Serverless&lt;/a&gt;&lt;br/&gt;o Worker Services con Colas"]
+    B -- Sí --&gt; M1["📦 &lt;b&gt;Monolito Modular&lt;/b&gt;&lt;br/&gt;+ ⬡ &lt;i&gt;Arquitectura Hexagonal&lt;/i&gt;&lt;br/&gt;&lt;small&gt;(Haz clic para explorar)&lt;/small&gt;"]
+    C -- Sí --&gt; M2["🚀 &lt;b&gt;Microservicios&lt;/b&gt;&lt;br/&gt;+ ⚡ &lt;i&gt;Orientada a Eventos (EDA)&lt;/i&gt;&lt;br/&gt;&lt;small&gt;(Haz clic para explorar)&lt;/small&gt;"]
+    D -- Sí --&gt; M3["☁️ &lt;b&gt;Arquitectura Serverless&lt;/b&gt;&lt;br/&gt;+ &lt;i&gt;Worker Services / Colas&lt;/i&gt;&lt;br/&gt;&lt;small&gt;(Haz clic para explorar)&lt;/small&gt;"]
 
-    style M1 fill:#e0f2f1,stroke:#00897b,stroke-width:2px;
-    style M2 fill:#e8eaf6,stroke:#3949ab,stroke-width:2px;
-    style M3 fill:#fff8e1,stroke:#f57f17,stroke-width:2px;</code></pre>
+    click M1 "monolito-modular" "Ir a Monolito Modular"
+    click M2 "microservicios" "Ir a Microservicios"
+    click M3 "arquitectura-serverless" "Ir a Serverless"
+
+    style M1 fill:#e0f2f1,stroke:#00897b,stroke-width:2px,cursor:pointer;
+    style M2 fill:#e8eaf6,stroke:#3949ab,stroke-width:2px,cursor:pointer;
+    style M3 fill:#fff8e1,stroke:#f57f17,stroke-width:2px,cursor:pointer;</code></pre>
 <hr />
 <h2 id="resumen-comparativo-de-estilos">📋 Resumen Comparativo de Estilos</h2>
 <table>
@@ -1061,6 +1067,8 @@ Para un análisis profundo de todas las variables técnicas y organizacionales, 
     
     
       <script src="assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="javascripts/diagram-interactions.js"></script>
       
     
   </body>
