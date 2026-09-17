@@ -1055,26 +1055,7 @@
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>          └─────────────────┘         └─────────────────┘
 </span></code></pre></div>
 <p>El patrón de <strong>Microfrontends</strong> extiende los principios de los microservicios hacia la capa de interfaz de usuario: permite descomponer la aplicación web en características semi-independientes desarrolladas por equipos autónomos multidisciplinares de extremo a extremo (<em>Vertical Slices</em>).</p>
-<pre class="mermaid"><code>graph TD
-    subgraph "Navegador del Usuario (Shell / Contenedor)"
-        Header[Microfrontend: Navegación &amp; Perfil]
-        Catalog[Microfrontend: Catálogo de Productos]
-        Cart[Microfrontend: Carrito &amp; Checkout]
-    end
-
-    subgraph "Equipos de Producto Autónomos (Full Stack)"
-        TeamCatalog[Equipo de Catálogo]
-        TeamCart[Equipo de Checkout]
-        TeamAuth[Equipo de Identidad]
-    end
-
-    TeamCatalog --&gt; Catalog
-    TeamCart --&gt; Cart
-    TeamAuth --&gt; Header
-
-    Catalog --&gt;|Consume| CatalogBFF[Catalog BFF / Service]
-    Cart --&gt;|Consume| CartBFF[Checkout BFF / Service]
-    Header --&gt;|Consume| AuthBFF[Auth Service]</code></pre>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="https://kroki.io/plantuml/svg/eNptk81q20AQx-96iqkNxYE6Hw2FkENIrGhJLsEghx5KD1NpLC1e7bq7q4RS-jB9hjxCXqwjafXhYnTRzvzmv_OfkW6dR-vrSkUffEkVwV6h1JHbSb1HixVYU-s8NlaThatJPKct1soLo_0Tct0spcIQPD_OPoFD7ZaOrNxOClyJuXmVugBva5ok9pjtsKDU_1IEljKPulAURSEOsyd8oYKLLV-q4NnVaKWBRVqSUnAGMbdAmpr8V_pxMgN0sLLmlRuAubgSdyKG3xHAtwfCnGOLTi-T728aPsKa7Faqk-9NWSDmybn4LC6amhj9-19lCsN3w9qavM68cS3MKeQM05dM33e0tdIbVo1Lynam9oG0nlsR4jI5j_5MnCU_a7k3bqoNd7XnxkzF4YWo2WHqGe9sbQgrx0pfmqc1hVxie6FG5zEn7WWO-VDAguUxcrA2kMHRUTj4mbDWH3hZ8QvpnBeSkn2RmTSuW0WIz5M4EeKiW0XTU-CoHVETWAnx3-jb-TbhswM4ZDp-HH5o8WiB9S097qCfDJzyV6lPb_rdX8M9OV6jUQqjyVAGrj8fAXnLI8WHAyQKFywbYnkzOL6Gh81mnUa9bp-fmBwRFh3znac-ectDbv7jf97iQL4=?" data-title="Kroki" data-desc-position="bottom"><img alt="Kroki" src="https://kroki.io/plantuml/svg/eNptk81q20AQx-96iqkNxYE6Hw2FkENIrGhJLsEghx5KD1NpLC1e7bq7q4RS-jB9hjxCXqwjafXhYnTRzvzmv_OfkW6dR-vrSkUffEkVwV6h1JHbSb1HixVYU-s8NlaThatJPKct1soLo_0Tct0spcIQPD_OPoFD7ZaOrNxOClyJuXmVugBva5ok9pjtsKDU_1IEljKPulAURSEOsyd8oYKLLV-q4NnVaKWBRVqSUnAGMbdAmpr8V_pxMgN0sLLmlRuAubgSdyKG3xHAtwfCnGOLTi-T728aPsKa7Faqk-9NWSDmybn4LC6amhj9-19lCsN3w9qavM68cS3MKeQM05dM33e0tdIbVo1Lynam9oG0nlsR4jI5j_5MnCU_a7k3bqoNd7XnxkzF4YWo2WHqGe9sbQgrx0pfmqc1hVxie6FG5zEn7WWO-VDAguUxcrA2kMHRUTj4mbDWH3hZ8QvpnBeSkn2RmTSuW0WIz5M4EeKiW0XTU-CoHVETWAnx3-jb-TbhswM4ZDp-HH5o8WiB9S097qCfDJzyV6lPb_rdX8M9OV6jUQqjyVAGrj8fAXnLI8WHAyQKFywbYnkzOL6Gh81mnUa9bp-fmBwRFh3znac-ectDbv7jf97iQL4=?"></a></p>
 <hr>
 <h2 id="2-estrategias-de-composicion">2. Estrategias de Composición</h2>
 <p>Existen 3 enfoques principales para ensamblar microfrontends:</p>
@@ -1171,23 +1152,7 @@
 <hr>
 <h2 id="5-el-patron-bff-backend-for-frontend">5. El Patrón BFF (Backend-For-Frontend)</h2>
 <p>Para evitar que los microfrontends hagan múltiples llamadas complejas y lentas a decenas de microservicios desde la red móvil del usuario, cada equipo de frontend suele mantener su propio <strong>BFF</strong>:</p>
-<pre class="mermaid"><code>graph LR
-    Browser[Navegador Móvil]
-
-    subgraph "Capa BFF (Node.js / Go / .NET)"
-        CheckoutBFF[Checkout BFF API]
-    end
-
-    subgraph "Microservicios Internos"
-        S1[Servicio de Inventario]
-        S2[Servicio de Descuentos]
-        S3[Servicio de Envíos]
-    end
-
-    Browser --&gt;|1 sola llamada agregada| CheckoutBFF
-    CheckoutBFF --&gt;|gRPC interno ultrarrápido| S1
-    CheckoutBFF --&gt;|gRPC interno ultrarrápido| S2
-    CheckoutBFF --&gt;|gRPC interno ultrarrápido| S3</code></pre>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="https://kroki.io/plantuml/svg/eNqNkt1KwzAUx-_zFMfuRsHpNhF1gujmqgMdw80r8eLQHtu4LClJ2jnER_LKR_DFPF2nVFEwgRBOfv_zmVPn0fp8rsSGT2lOkCmUWriZ1BlanIM1uY77xmqycFizx_SAufKh0X6ErAsmlBiC22GwDQ61azqy8qEmcCnGZiF1At7mVHvIMJphQhO_VASWIo86USQERt5YCEZYUMJSC7twlmVw_f5WSBUAOuhZs-AwQqxdQNDHDKEXhrA5MjHtPDoWXRg-dkaD6VYlCsMrXHI1jUEr7IRteBYAd_2UopnJ_Up8Nh7el-insbQ1Wq3Do4Pesacn312k0pN4qQW-lpE1nEshI2kcDLUnq_myeUMxjK0sMMYqfo0kB41wv9xVEpO1npvLHgrSPBtpVqlM2oyu1k_wnFyUM2pcBXb-Age6eH_9pPa-KK5i3UdoWpmkvnnyrfAutMEZhaAUzrkKuJxOx4CJLaeCoo42ecCa5ZxsF5KbcR9k1Yffqc6_qL2f1CnpuPywH4S85do=?" data-title="Kroki" data-desc-position="bottom"><img alt="Kroki" src="https://kroki.io/plantuml/svg/eNqNkt1KwzAUx-_zFMfuRsHpNhF1gujmqgMdw80r8eLQHtu4LClJ2jnER_LKR_DFPF2nVFEwgRBOfv_zmVPn0fp8rsSGT2lOkCmUWriZ1BlanIM1uY77xmqycFizx_SAufKh0X6ErAsmlBiC22GwDQ61azqy8qEmcCnGZiF1At7mVHvIMJphQhO_VASWIo86USQERt5YCEZYUMJSC7twlmVw_f5WSBUAOuhZs-AwQqxdQNDHDKEXhrA5MjHtPDoWXRg-dkaD6VYlCsMrXHI1jUEr7IRteBYAd_2UopnJ_Up8Nh7el-insbQ1Wq3Do4Pesacn312k0pN4qQW-lpE1nEshI2kcDLUnq_myeUMxjK0sMMYqfo0kB41wv9xVEpO1npvLHgrSPBtpVqlM2oyu1k_wnFyUM2pcBXb-Age6eH_9pPa-KK5i3UdoWpmkvnnyrfAutMEZhaAUzrkKuJxOx4CJLaeCoo42ecCa5ZxsF5KbcR9k1Yffqc6_qL2f1CnpuPywH4S85do=?"></a></p>
 <hr>
 <h2 id="6-cuando-adoptar-y-cuando-evitar-microfrontends">6. Cuándo Adoptar y Cuándo Evitar Microfrontends</h2>
 <ul>

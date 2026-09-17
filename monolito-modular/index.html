@@ -1123,42 +1123,7 @@
 <blockquote>
 <p><strong>Principio Clave:</strong> <em>"Deploy together, develop with boundaries"</em>. Ofrece la simplicidad operacional y de despliegue de un monolito, con la higiene estructural, mantenibilidad y disciplina de límites de los microservicios.</p>
 </blockquote>
-<pre class="mermaid"><code>graph TD
-    subgraph Proceso Único [Monolito Modular Runtime]
-        API[API Gateway / Controladores HTTP Únicos]
-
-        subgraph ModuloUsuarios [Módulo de Usuarios]
-            U_Domain[Dominio &amp; Reglas]
-            U_App[Casos de Uso]
-            U_Infra[Persistencia Schema 'users']
-        end
-
-        subgraph ModuloPedidos [Módulo de Pedidos]
-            O_Domain[Dominio &amp; Reglas]
-            O_App[Casos de Uso]
-            O_Infra[Persistencia Schema 'orders']
-        end
-
-        subgraph ModuloFacturacion [Módulo de Facturación]
-            B_Domain[Dominio &amp; Reglas]
-            B_App[Casos de Uso]
-            B_Infra[Persistencia Schema 'billing']
-        end
-
-        EventBus[(In-Process Event Bus / MediatR)]
-
-        API --&gt; ModuloUsuarios
-        API --&gt; ModuloPedidos
-        API --&gt; ModuloFacturacion
-
-        ModuloPedidos -.-&gt;|Evento: PedidoCreado| EventBus
-        EventBus -.-&gt;|Notifica| ModuloFacturacion
-    end
-
-    DB[(Base de Datos Compartida pero con Esquemas Aislados)]
-    U_Infra --&gt; DB
-    O_Infra --&gt; DB
-    B_Infra --&gt; DB</code></pre>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="https://kroki.io/plantuml/svg/eNqNlF9u2kAQxt99iilIDakKpclDKY1QMMEqUokphKe2qib2AquYXbp_mlZVL9Jr5AhcrGN7DXZEU3iyZr6db367M1xqg8rYdeI9Myu2ZrBJkAtP33GxQYVrUNKKeCCVYAo6pXjMFmgTE0hhrpHO1WZsKRnMR7WXoFHopmaKL0oHNhjd4ZLNzM-EgWKRQbFMWEmgVxjLey6WYJRlnucOQG0shUy4kTCWsU1QwdQKw8mzMVEyYlrC9o_gkTytAepdsh50gn4wgF8ewKf-ZASvYEDNKpmQjWIa3t_cTL6kJ9Jkvd3uvH3jvzPsh-ner7ihBgD2LWwfyFoSNcy1RcWlzsyoozmBaqgP28FZ8DpzI78rueaCS3gOU7ZMUGc-868Uptul1rJfLh2gljovLJ2sv9lUNROy4NowEXGExiyil0I4sanzyak7NBILhZVjeaEmXapo9nbuLpXLm3aTpUhI8d__Yp6wmMd75FDFOfM5MV89yRwexxweyywzawcdHoAOK9BhGTqsQIf_gw4wMlZhxLcPoiD3eZKkE5o6ng_bT6L7x6H7x6Lf5t6O3T_A7lfY_TK7X2H3y-zfLLNEPhLNfJ00DL8zYcC3-rNojOnp0Uxpe7Kozpcs-yZBaj9sd848qhSjwVvUVGoitVkqNvv4gQoMNRms0zXjOl09V-HKp_kZDAO3MwuZ0MNCLZvp1otMkoNn-1VS5BNQkeTzWNK4q6qI3NOlnaYLX9xSscGPg67mo2hRxNtvQSvNtnr7K-nCxUW-MAPFCLjX83a5QlwapS5cS8MXPELP262lcyzfQHgw59r0DyaLbi-ZiNO_-L9NLOQo?" data-title="Kroki" data-desc-position="bottom"><img alt="Kroki" src="https://kroki.io/plantuml/svg/eNqNlF9u2kAQxt99iilIDakKpclDKY1QMMEqUokphKe2qib2AquYXbp_mlZVL9Jr5AhcrGN7DXZEU3iyZr6db367M1xqg8rYdeI9Myu2ZrBJkAtP33GxQYVrUNKKeCCVYAo6pXjMFmgTE0hhrpHO1WZsKRnMR7WXoFHopmaKL0oHNhjd4ZLNzM-EgWKRQbFMWEmgVxjLey6WYJRlnucOQG0shUy4kTCWsU1QwdQKw8mzMVEyYlrC9o_gkTytAepdsh50gn4wgF8ewKf-ZASvYEDNKpmQjWIa3t_cTL6kJ9Jkvd3uvH3jvzPsh-ner7ihBgD2LWwfyFoSNcy1RcWlzsyoozmBaqgP28FZ8DpzI78rueaCS3gOU7ZMUGc-868Uptul1rJfLh2gljovLJ2sv9lUNROy4NowEXGExiyil0I4sanzyak7NBILhZVjeaEmXapo9nbuLpXLm3aTpUhI8d__Yp6wmMd75FDFOfM5MV89yRwexxweyywzawcdHoAOK9BhGTqsQIf_gw4wMlZhxLcPoiD3eZKkE5o6ng_bT6L7x6H7x6Lf5t6O3T_A7lfY_TK7X2H3y-zfLLNEPhLNfJ00DL8zYcC3-rNojOnp0Uxpe7Kozpcs-yZBaj9sd848qhSjwVvUVGoitVkqNvv4gQoMNRms0zXjOl09V-HKp_kZDAO3MwuZ0MNCLZvp1otMkoNn-1VS5BNQkeTzWNK4q6qI3NOlnaYLX9xSscGPg67mo2hRxNtvQSvNtnr7K-nCxUW-MAPFCLjX83a5QlwapS5cS8MXPELP262lcyzfQHgw59r0DyaLbi-ZiNO_-L9NLOQo?"></a></p>
 <hr>
 <h2 id="2-por-que-elegir-un-monolito-modular-antes-que-microservicios">2. ¿Por qué elegir un Monolito Modular antes que Microservicios?</h2>
 <p>Muchos equipos caen en la trampa de adoptar microservicios de manera prematura, pagando los altos costos de la computación distribuida (latencia de red, consistencia eventual, serialización, DevOps complejo, orquestación de Kubernetes) antes de conocer con certeza los límites del dominio de negocio.</p>

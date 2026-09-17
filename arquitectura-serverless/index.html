@@ -1045,40 +1045,7 @@
 <blockquote>
 <p><strong>Premisa Serverless:</strong> <em>"No server is easier to manage than no server"</em>. Elimina tareas operacionales como parcheo de sistemas operativos, escalado manual de máquinas virtuales y aprovisionamiento de capacidad en reposo.</p>
 </blockquote>
-<pre class="mermaid"><code>graph LR
-    subgraph "Fuentes de Eventos (Triggers)"
-        HTTP[Petición HTTPS / REST]
-        File[Subida de Archivo a Storage / S3]
-        Schedule[Cron Job / Temporizador]
-        Queue[Mensaje en Cola SQS/PubSub]
-    end
-
-    subgraph "Plataforma Serverless (FaaS / CaaS)"
-        Router[API Gateway / Event Router]
-
-        subgraph "Instancias Efímeras (Autoescalado 0 a N)"
-            F1[Instancia Función 1]
-            F2[Instancia Función 2]
-            FN[Instancia Función N]
-        end
-    end
-
-    subgraph "Servicios Gestionados de Persistencia"
-        NoSQL[(Serverless DB: DynamoDB / Firestore)]
-        Blob[(Object Storage: S3 / GCS)]
-    end
-
-    HTTP --&gt; Router
-    File --&gt; Router
-    Schedule --&gt; Router
-    Queue --&gt; Router
-
-    Router --&gt; F1
-    Router --&gt; F2
-    Router --&gt; FN
-
-    F1 --&gt; NoSQL
-    F2 --&gt; Blob</code></pre>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="https://kroki.io/plantuml/svg/eNp9VMtu00AU3fsrLsmmSFQkqRAlSKh1YpeiEpI6rIDFtX2TTGvPhHmkFNRPYsUn9Me440lTt0Uki4zvnPs65zhHxqK2rq6iZ3ZFNcG6QiEjcynkGjXWoJWT5UhpSRoOW_GSFugqmyppJ8h5nYyWiuDzaecFGJRm35AWi1aCWWGproRcgtWOWhdrLC5xSZm9rgg0FRblsqIo2sahkzqSlgy3hGTDR2Vgb67FcknaPO8AGrh7gm5ykA7SMfyKAL5MyYpC3P6R8H4-n2bwEs6TbP7NJ_gAdNPm46GZy0WJvsOxLlZiowAhs0pz_wafCp6thR9pJeGDyrnmnOq10uInb6cbbFasqHQP8N8dOV7kI0mDFwQkYaQq7jDzQ01dzu2bPWYNjvOS3uEgumlxMK3Q4kLpmrNIb0hXZJiGFNGXGPFPYOL-0mf4BC73yn8DJ8fTUzhBS1d4zXkNnXCunKUwezhCt9c7fPM6fmvphx1erYRlOQB2w5xKdo0sBCcki9vfNWk-7R07q8gUWDET0GMCJ2GkLZq8Oj1Wp99MwrOkTgZ5zrDOmf1-oLrfIu4fqEFADf6PmgTUpIW6eUCoJ4rdwV46IWOFkjx1Y7Ep-0gYS36_Zv77QJD0IOk1G5SsSI5mW2uryDj-KvfG1xJrNY6Z4VRoLq80BS4mKpudQTeOx0kac42Fqkrmu_Mpv2Dj31mOS2QHXtZKufIuGArEFZuum4ySNO37fRoj77P9V3b_3Va-qHHr4-DOlo8vgukeR6OtFXZx7vckNHgamkQRK7h7DgsP4YzI-80UWuQUsXo7RLPREE4catYNw-sXHZEs_b_SX42YfsI=?" data-title="Kroki" data-desc-position="bottom"><img alt="Kroki" src="https://kroki.io/plantuml/svg/eNp9VMtu00AU3fsrLsmmSFQkqRAlSKh1YpeiEpI6rIDFtX2TTGvPhHmkFNRPYsUn9Me440lTt0Uki4zvnPs65zhHxqK2rq6iZ3ZFNcG6QiEjcynkGjXWoJWT5UhpSRoOW_GSFugqmyppJ8h5nYyWiuDzaecFGJRm35AWi1aCWWGproRcgtWOWhdrLC5xSZm9rgg0FRblsqIo2sahkzqSlgy3hGTDR2Vgb67FcknaPO8AGrh7gm5ykA7SMfyKAL5MyYpC3P6R8H4-n2bwEs6TbP7NJ_gAdNPm46GZy0WJvsOxLlZiowAhs0pz_wafCp6thR9pJeGDyrnmnOq10uInb6cbbFasqHQP8N8dOV7kI0mDFwQkYaQq7jDzQ01dzu2bPWYNjvOS3uEgumlxMK3Q4kLpmrNIb0hXZJiGFNGXGPFPYOL-0mf4BC73yn8DJ8fTUzhBS1d4zXkNnXCunKUwezhCt9c7fPM6fmvphx1erYRlOQB2w5xKdo0sBCcki9vfNWk-7R07q8gUWDET0GMCJ2GkLZq8Oj1Wp99MwrOkTgZ5zrDOmf1-oLrfIu4fqEFADf6PmgTUpIW6eUCoJ4rdwV46IWOFkjx1Y7Ep-0gYS36_Zv77QJD0IOk1G5SsSI5mW2uryDj-KvfG1xJrNY6Z4VRoLq80BS4mKpudQTeOx0kac42Fqkrmu_Mpv2Dj31mOS2QHXtZKufIuGArEFZuum4ySNO37fRoj77P9V3b_3Va-qHHr4-DOlo8vgukeR6OtFXZx7vckNHgamkQRK7h7DgsP4YzI-80UWuQUsXo7RLPREE4catYNw-sXHZEs_b_SX42YfsI=?"></a></p>
 <hr>
 <h2 id="2-modelos-de-computo-serverless-faas-vs-caas-serverless">2. Modelos de Cómputo Serverless: FaaS vs CaaS Serverless</h2>
 <table>

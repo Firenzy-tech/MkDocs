@@ -1089,62 +1089,7 @@
 <blockquote>
 <p><strong>Objetivo fundamental:</strong> Permitir que una aplicación sea desarrollada, probada y ejecutada de manera independiente de su entorno tecnológico final. Tu núcleo de negocio no debe saber si los datos provienen de una petición HTTP REST, un comando de terminal CLI, un test unitario automatizado o una cola de eventos RabbitMQ.</p>
 </blockquote>
-<pre class="mermaid"><code>graph TD
-    subgraph "Mundo Exterior (Driving / Primario)"
-        REST[Controlador REST API]
-        CLI[Consola CLI]
-        TestRunner[Test Suite Automatizado]
-        EventConsumer[Consumidor Kafka/RabbitMQ]
-    end
-
-    subgraph "Puertos de Entrada (Inbound / Driving Ports)"
-        InPort1[IRealizarPagoUseCase]
-        InPort2[IConsultarSaldoUseCase]
-    end
-
-    subgraph "NÚCLEO DE LA APLICACIÓN (Agnóstico a Frameworks)"
-        subgraph "Capa de Aplicación"
-            UseCase1[RealizarPagoHandler]
-            UseCase2[ConsultarSaldoHandler]
-        end
-        subgraph "Capa de Dominio"
-            Entity[CuentaBancaria]
-            VO[Dinero, Moneda]
-            DomainService[ValidadorTransferencia]
-        end
-    end
-
-    subgraph "Puertos de Salida (Outbound / Driven Ports)"
-        OutPort1[ICuentaRepository]
-        OutPort2[IPasarelaPagoGateway]
-        OutPort3[INotificadorService]
-    end
-
-    subgraph "Mundo Exterior (Driven / Secundario)"
-        Postgres[Adaptador PostgreSQL / EF Core]
-        Stripe[Adaptador Stripe API Client]
-        SendGrid[Adaptador SendGrid / SMTP]
-    end
-
-    REST --&gt; InPort1
-    CLI --&gt; InPort1
-    TestRunner --&gt; InPort1
-    EventConsumer --&gt; InPort1
-
-    InPort1 --&gt; UseCase1
-    InPort2 --&gt; UseCase2
-
-    UseCase1 --&gt; Entity
-    UseCase1 --&gt; DomainService
-    UseCase2 --&gt; Entity
-
-    UseCase1 --&gt; OutPort1
-    UseCase1 --&gt; OutPort2
-    UseCase1 --&gt; OutPort3
-
-    OutPort1 --&gt; Postgres
-    OutPort2 --&gt; Stripe
-    OutPort3 --&gt; SendGrid</code></pre>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="https://kroki.io/plantuml/svg/eNqFVU1T2zAQvftXbOFCZ5opJKUDPXRIjUMz5SPgQA8Mh429CSqO5JFkKG35Vdx65Y91LTuJnIRpckiifW-9-_Zpc2AsaltMs-CNvaUpQZ6hkIG5EzJHjVPQqpBpqLQkDXveeUpjLDLbU9KeIvM2Ypoogsv-xjswKE3LkBZjj2BuMVUPQk7A6oK8QI7JHU4oto8ZgabEopxkFAT1OWyccAUKop-WMyoNW4da3Jd53sNAiyny4dsNQAP1-XelsxQ2o06v3TuE3wHAdchVapVxARouongI3UH_pqS4H5s996qBhnEQHldx_vTDQzIW4kJYgm5h1RSt-MVJHbSMXRSy1GkpYTEV5YO_4fgOuegLHI2EPTmvHuDiHufJa_z05W-SkWKtgWvq5plIMBEvzxK2uhP58mysSBQg9FhGelD6zlRC8LiIE-6WbyfAPOOgIG2VKTNGLAmmCFt9OSpnXFH7cqC0NSzfXm832ndsACFZ-zEmnKE_1DzdMY9CHwpuVpV4j7qzQnAtZmyzGLN0Gd5mOLfslRhijmV9XrsO383zY3xcKFWXdr1cz1eUaUbaqXtpKERDO9zONruhqu26WdAafNvDry_uUE2FFKqyHftAyLW1hQVJi19QJuxSlpo1F_bxrXtW9R02w73oY7hf4asO2CMnSlI5myvMCoKz0Q--FqbiXZ01OQwRaensmRAkE4E3i8pi0veCJ7FgNXvyPBG7XLB1VljPE_yrNgW31om215iiavSCcmWEVfrR5606YoAGNWU4wIk6QksP2CC0Vwinyooxu4G7rLvx8R3X0tN_NgZJ1jWmhEPNlUGy3hi9MPoQhdXG6KaYW7cvBsrYiab4_Jj5Uc9dLqduHTD-dV_QYqtFTuWigTATrI7j1KfrGSTTIy3SssyT4aDCz8689eB2Vot3qWx9nl-6clEtn3kbaQU-WzvLgaD-Mg_MrlAdaC8H2kEwv2WzUGXt1fOGH4P5ZVuieTwtJreWI3MnvRpqvx7qBMF8VK0ib_1Z5INPIKZ5xv977N6gHk4T017CzAbSRHWaqANGlf-p_wAgZmlP?" data-title="Kroki" data-desc-position="bottom"><img alt="Kroki" src="https://kroki.io/plantuml/svg/eNqFVU1T2zAQvftXbOFCZ5opJKUDPXRIjUMz5SPgQA8Mh429CSqO5JFkKG35Vdx65Y91LTuJnIRpckiifW-9-_Zpc2AsaltMs-CNvaUpQZ6hkIG5EzJHjVPQqpBpqLQkDXveeUpjLDLbU9KeIvM2Ypoogsv-xjswKE3LkBZjj2BuMVUPQk7A6oK8QI7JHU4oto8ZgabEopxkFAT1OWyccAUKop-WMyoNW4da3Jd53sNAiyny4dsNQAP1-XelsxQ2o06v3TuE3wHAdchVapVxARouongI3UH_pqS4H5s996qBhnEQHldx_vTDQzIW4kJYgm5h1RSt-MVJHbSMXRSy1GkpYTEV5YO_4fgOuegLHI2EPTmvHuDiHufJa_z05W-SkWKtgWvq5plIMBEvzxK2uhP58mysSBQg9FhGelD6zlRC8LiIE-6WbyfAPOOgIG2VKTNGLAmmCFt9OSpnXFH7cqC0NSzfXm832ndsACFZ-zEmnKE_1DzdMY9CHwpuVpV4j7qzQnAtZmyzGLN0Gd5mOLfslRhijmV9XrsO383zY3xcKFWXdr1cz1eUaUbaqXtpKERDO9zONruhqu26WdAafNvDry_uUE2FFKqyHftAyLW1hQVJi19QJuxSlpo1F_bxrXtW9R02w73oY7hf4asO2CMnSlI5myvMCoKz0Q--FqbiXZ01OQwRaensmRAkE4E3i8pi0veCJ7FgNXvyPBG7XLB1VljPE_yrNgW31om215iiavSCcmWEVfrR5606YoAGNWU4wIk6QksP2CC0Vwinyooxu4G7rLvx8R3X0tN_NgZJ1jWmhEPNlUGy3hi9MPoQhdXG6KaYW7cvBsrYiab4_Jj5Uc9dLqduHTD-dV_QYqtFTuWigTATrI7j1KfrGSTTIy3SssyT4aDCz8689eB2Vot3qWx9nl-6clEtn3kbaQU-WzvLgaD-Mg_MrlAdaC8H2kEwv2WzUGXt1fOGH4P5ZVuieTwtJreWI3MnvRpqvx7qBMF8VK0ib_1Z5INPIKZ5xv977N6gHk4T017CzAbSRHWaqANGlf-p_wAgZmlP?"></a></p>
 <hr>
 <h2 id="2-los-componentes-del-hexagono">2. Los Componentes del Hexágono</h2>
 <p>La metáfora visual del "hexágono" se utiliza porque no existe una jerarquía de "arriba y abajo", sino un <strong>interior</strong> (el negocio) protegido y rodeado por un <strong>exterior</strong> (la infraestructura).</p>

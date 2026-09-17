@@ -945,22 +945,7 @@
 </div>
 <hr>
 <h2 id="que-arquitectura-elegir-guia-rapida">🧭 ¿Qué arquitectura elegir? (Guía Rápida)</h2>
-<pre class="mermaid"><code>graph TD
-    A["🎯 ¿Cuál es el estado o prioridad de tu proyecto?"] --&gt; B{"¿Equipo pequeño / Fase inicial / Validando modelo?"}
-    A --&gt; C{"¿Gran escala de equipos (&gt;30 devs) o dominios independientes?"}
-    A --&gt; D{"¿Picos impredecibles o tareas por eventos esporádicos?"}
-
-    B -- Sí --&gt; M1["📦 &lt;b&gt;Monolito Modular&lt;/b&gt;&lt;br/&gt;+ ⬡ &lt;i&gt;Arquitectura Hexagonal&lt;/i&gt;&lt;br/&gt;&lt;small&gt;(Haz clic para explorar)&lt;/small&gt;"]
-    C -- Sí --&gt; M2["🚀 &lt;b&gt;Microservicios&lt;/b&gt;&lt;br/&gt;+ ⚡ &lt;i&gt;Orientada a Eventos (EDA)&lt;/i&gt;&lt;br/&gt;&lt;small&gt;(Haz clic para explorar)&lt;/small&gt;"]
-    D -- Sí --&gt; M3["☁️ &lt;b&gt;Arquitectura Serverless&lt;/b&gt;&lt;br/&gt;+ &lt;i&gt;Worker Services / Colas&lt;/i&gt;&lt;br/&gt;&lt;small&gt;(Haz clic para explorar)&lt;/small&gt;"]
-
-    click M1 "monolito-modular" "Ir a Monolito Modular"
-    click M2 "microservicios" "Ir a Microservicios"
-    click M3 "arquitectura-serverless" "Ir a Serverless"
-
-    style M1 fill:#e0f2f1,stroke:#00897b,stroke-width:2px,cursor:pointer;
-    style M2 fill:#e8eaf6,stroke:#3949ab,stroke-width:2px,cursor:pointer;
-    style M3 fill:#fff8e1,stroke:#f57f17,stroke-width:2px,cursor:pointer;</code></pre>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="https://kroki.io/plantuml/svg/eNplkrtuE1EQhvt9isnS2AtWLkjIVYhldoEiAckCCsfFaM_YOcrZM5tzMaQLLwAFDUqD3FCBEB1dpPhN8gLwCMzai-KI5tykf_7vnzMHPqALsTLJVjihiqA2qG3iT7Wt0WEFjqNVQ3aWHPQ33hVNMZpQsA1HKLp0RDMmePU8fQAere95cnq6IfAnqPittjMILlKSdLIu9OTF9vYh_fPlww-4vhrG5cIAeTAItdPstEIlVhCi3PmcysCP0yTRU0ivr_KzqGuGms4iLX8ybEOBnkBbXWo0cn2NRgpYxWAFrtSiBUlpE_jnPB4tv08a-09fIcsO2bLRgeGQVTTosuzY3oebbwsYOPEKYh8dwjN6hzO2aI7teFy1ml611kwmKdzLd4q9Yjch40m81rRPHVqJVqJk6-w_3JFYc98FBsWVILMXcEU1WaXJBvK3rP_TXl40tLp0LF2eS1z2LevlAl64pgAqBIR8Lkcp3cmfDLor3DuiNWw_HxSPxKfFvbV7qUvRMsiIEHqBr9ktF0qX6AXj5vP7378-Csid5oykNjlDviV6w-5URme0spSf3YYhG_QNC27omnFpdSuooij6-W4DJf2YJuv1QLZmVP8CUZ74YA==?" data-title="Kroki" data-desc-position="bottom"><img alt="Kroki" src="https://kroki.io/plantuml/svg/eNplkrtuE1EQhvt9isnS2AtWLkjIVYhldoEiAckCCsfFaM_YOcrZM5tzMaQLLwAFDUqD3FCBEB1dpPhN8gLwCMzai-KI5tykf_7vnzMHPqALsTLJVjihiqA2qG3iT7Wt0WEFjqNVQ3aWHPQ33hVNMZpQsA1HKLp0RDMmePU8fQAere95cnq6IfAnqPittjMILlKSdLIu9OTF9vYh_fPlww-4vhrG5cIAeTAItdPstEIlVhCi3PmcysCP0yTRU0ivr_KzqGuGms4iLX8ybEOBnkBbXWo0cn2NRgpYxWAFrtSiBUlpE_jnPB4tv08a-09fIcsO2bLRgeGQVTTosuzY3oebbwsYOPEKYh8dwjN6hzO2aI7teFy1ml611kwmKdzLd4q9Yjch40m81rRPHVqJVqJk6-w_3JFYc98FBsWVILMXcEU1WaXJBvK3rP_TXl40tLp0LF2eS1z2LevlAl64pgAqBIR8Lkcp3cmfDLor3DuiNWw_HxSPxKfFvbV7qUvRMsiIEHqBr9ktF0qX6AXj5vP7378-Csid5oykNjlDviV6w-5URme0spSf3YYhG_QNC27omnFpdSuooij6-W4DJf2YJuv1QLZmVP8CUZ74YA==?"></a></p>
 <hr>
 <h2 id="resumen-comparativo-de-estilos">📋 Resumen Comparativo de Estilos</h2>
 <table>

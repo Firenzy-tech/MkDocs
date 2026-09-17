@@ -808,6 +808,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#5-diagrama-de-transicion-de-arquitectura-plantuml-kroki" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Diagrama de Transición de Arquitectura (PlantUML / Kroki)
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -888,6 +899,17 @@
     <span class="md-ellipsis">
       
         4. Patrones de Evolución Natural
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-diagrama-de-transicion-de-arquitectura-plantuml-kroki" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Diagrama de Transición de Arquitectura (PlantUML / Kroki)
       
     </span>
   </a>
@@ -1039,27 +1061,7 @@
 <hr>
 <h2 id="3-arbol-de-decision-para-elegir-tu-arquitectura">3. Árbol de Decisión para Elegir tu Arquitectura</h2>
 <p>Utiliza este diagrama de flujo como punto de partida para evaluar el estilo arquitectónico más adecuado para tu iniciativa:</p>
-<pre class="mermaid"><code>flowchart TD
-    Start(["Inicio: Nuevo Proyecto o Módulo"]) --&gt; Q1{"¿El dominio y sus reglas&lt;br/&gt;están 100% claros y estables?"}
-
-    Q1 -- No --&gt; Monolith["&lt;b&gt;Monolito Modular&lt;/b&gt;&lt;br/&gt;Comienza simple, delimita módulos en código,&lt;br/&gt;acelera el Time-to-Market"]
-
-    Q1 -- Sí --&gt; Q2{"¿Cuántos desarrolladores&lt;br/&gt;trabajarán en simultáneo?"}
-
-    Q2 -- "&lt; 25 ingenieros" --&gt; Q3{"¿Existen picos extremos&lt;br/&gt;impredecibles de tráfico?"}
-    Q2 -- "&gt; 30 ingenieros" --&gt; Q4{"¿Cada equipo necesita&lt;br/&gt;desplegar independientemente?"}
-
-    Q3 -- Sí --&gt; Serverless["&lt;b&gt;Arquitectura Serverless / FaaS&lt;/b&gt;&lt;br/&gt;Autoescalado de 0 a miles, pago por uso"]
-    Q3 -- No --&gt; Monolith
-
-    Q4 -- Sí --&gt; Microservices["&lt;b&gt;Microservicios + Clean Architecture&lt;/b&gt;&lt;br/&gt;Equipos autónomos, repositorios dedicados,&lt;br/&gt;infraestructura distribuida"]
-    Q4 -- No --&gt; Monolith
-
-    Microservices --&gt; Q5{"¿Requiere alta concurrencia,&lt;br/&gt;procesamiento asíncrono o analytics?"}
-    Q5 -- Sí --&gt; EDA["&lt;b&gt;Arquitectura Orientada a Eventos (EDA)&lt;/b&gt;&lt;br/&gt;Kafka / RabbitMQ + Outbox + CQRS"]
-    Q5 -- No --&gt; RestMS["Microservicios estándar REST / gRPC"]
-
-    Start -.-&gt; HexaNote["&lt;b&gt;Nota:&lt;/b&gt; La &lt;i&gt;Arquitectura Hexagonal&lt;/i&gt; se aplica&lt;br/&gt;DENTRO de cualquier servicio o módulo de las anteriores"]</code></pre>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="https://kroki.io/plantuml/svg/eNqtVE1v00AQvftXDEVIrQhqACGhpiotJqCKJrQJHJByGdsTd-l6x-xHm_Bv-gN66g9AIn-MWdtpe0glDly8K9vz3sx7b_fQebQ-VDp54s-pIqg1KpO4C2VqtFiB5WCKlK0hC28fvC9ojkH7j2z8GKVua0olE3w73uqBQ-NeOLJq_qDAnWPBV8qU4G2gJGmIk71xoEuGU8tLyj0Dw2h1WwTNgyRRc9j-83uooeBKGcWwBEulRifkYIQuVzwz5Pzq2sDLfv8Z5BotO_mvwiLI7t0OyFQGtse8kwA8PVHluf9kiczefnYwYsNaCemIhRHt_m52MDOpkJH5heBUVWvqCZlWlfIIApRLc6rk3sxUuJC38ptGuCQtvRRYxMbIeOkSB8LnPNcJaUewPV3dxA7akdIgHXuOczi0lrUWaSy5mZRihj_QRK4omxbkuyEO4HUfREAyimS4iLdGPBEw-hlULauhnJz0ayJ8rRWVIUI3AilTUE2mkAk93cvTdXePN4lgZAlQy-A5mzxYSyZXKKPXloUBo0wiHrrVjcmtaCnmoUG99CrfCL024DtpzVeNA0oKJSiXSqx08ByGH45aFz7j_AJ3J5hlyo_O5Et6NpnK8iX4jBeDDrHVtjX3IYPkFfUGgmGTlWJt9dHpsYPJcPoVdqGcnKaC_z7GnQpIJde08O6OSTSbd_vG1k30_5SvYWdTaVGYXHS6aiPvAJWLUbhjvWfq6FvGfXj15pEgpGjL9oC0UWKQDLBdXRcqR0kBQ63yGJaFpLSSjYTcUkG5yvTmQHSKLrGZ6chK-16OarAIUxGWrNQ5EfAj4rSTNXgml2McBfqAMO5JmEuhZgvB8eD_6KiB1nbC6rb2quLmzEB7pdXxHohdkGwfF7RZ2-ehLPEm_As8nbsm?" data-title="Kroki" data-desc-position="bottom"><img alt="Kroki" src="https://kroki.io/plantuml/svg/eNqtVE1v00AQvftXDEVIrQhqACGhpiotJqCKJrQJHJByGdsTd-l6x-xHm_Bv-gN66g9AIn-MWdtpe0glDly8K9vz3sx7b_fQebQ-VDp54s-pIqg1KpO4C2VqtFiB5WCKlK0hC28fvC9ojkH7j2z8GKVua0olE3w73uqBQ-NeOLJq_qDAnWPBV8qU4G2gJGmIk71xoEuGU8tLyj0Dw2h1WwTNgyRRc9j-83uooeBKGcWwBEulRifkYIQuVzwz5Pzq2sDLfv8Z5BotO_mvwiLI7t0OyFQGtse8kwA8PVHluf9kiczefnYwYsNaCemIhRHt_m52MDOpkJH5heBUVWvqCZlWlfIIApRLc6rk3sxUuJC38ptGuCQtvRRYxMbIeOkSB8LnPNcJaUewPV3dxA7akdIgHXuOczi0lrUWaSy5mZRihj_QRK4omxbkuyEO4HUfREAyimS4iLdGPBEw-hlULauhnJz0ayJ8rRWVIUI3AilTUE2mkAk93cvTdXePN4lgZAlQy-A5mzxYSyZXKKPXloUBo0wiHrrVjcmtaCnmoUG99CrfCL024DtpzVeNA0oKJSiXSqx08ByGH45aFz7j_AJ3J5hlyo_O5Et6NpnK8iX4jBeDDrHVtjX3IYPkFfUGgmGTlWJt9dHpsYPJcPoVdqGcnKaC_z7GnQpIJde08O6OSTSbd_vG1k30_5SvYWdTaVGYXHS6aiPvAJWLUbhjvWfq6FvGfXj15pEgpGjL9oC0UWKQDLBdXRcqR0kBQ63yGJaFpLSSjYTcUkG5yvTmQHSKLrGZ6chK-16OarAIUxGWrNQ5EfAj4rSTNXgml2McBfqAMO5JmEuhZgvB8eD_6KiB1nbC6rb2quLmzEB7pdXxHohdkGwfF7RZ2-ehLPEm_As8nbsm?"></a></p>
 <hr>
 <h2 id="4-patrones-de-evolucion-natural">4. Patrones de Evolución Natural</h2>
 <p>Los sistemas de software exitosos rara vez comienzan en la arquitectura más compleja; evolucionan orgánicamente a medida que crecen:</p>
@@ -1076,6 +1078,10 @@
 <li>Se implementa el <strong>patrón Transactional Outbox</strong> y <strong>Event-Driven Architecture</strong> para sincronización distribuida.</li>
 <li>En el frontend, si los equipos web crecen exponencialmente, se adoptan <strong>Microfrontends</strong>.</li>
 </ol>
+<hr>
+<h2 id="5-diagrama-de-transicion-de-arquitectura-plantuml-kroki">5. Diagrama de Transición de Arquitectura (PlantUML / Kroki)</h2>
+<p>Este diagrama es renderizado dinámicamente mediante el plugin <strong>Kroki</strong> usando <strong>PlantUML</strong>:</p>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="https://kroki.io/plantuml/svg/eNplksFOAjEQhu_7FBM4Q2S97YEQViAmbkJC4sV4GNtxbeh21mkXY4xPxSPwYrbCEpTz_883__ztzAeU0DU281vjWhRsoEW1xZo24dMSCKmArrZ0YRDunC5ZHAlMbrLsNACDJXqCSQGPaI1GZQ57N4CvDOCpYsfWBIaKdWdRngE9VBMYPpj6LayEyGXf_0l5AXfkUXFrsTHkAve0wz5S2INiB4tdUjzcu0Di2B_R-Qk9tx1dk28LWHiFFqFCb3bYc40S9iQ7owzDmrTRPW8Ts8aT0V77SpuyUW_ML43kfdo6F97S6eg5DFdsdQoVCxhp_nCjaQpcQBnbNsdLQZMFeu9My1nUzraYo4BNkN83EVia-q-cX8txZCypi_E0bS9g3b1Yo7BvLktTY0uvZ0PJzncNnQ0zcjr9kR_Kw7ft?" data-title="Kroki" data-desc-position="bottom"><img alt="Kroki" src="https://kroki.io/plantuml/svg/eNplksFOAjEQhu_7FBM4Q2S97YEQViAmbkJC4sV4GNtxbeh21mkXY4xPxSPwYrbCEpTz_883__ztzAeU0DU281vjWhRsoEW1xZo24dMSCKmArrZ0YRDunC5ZHAlMbrLsNACDJXqCSQGPaI1GZQ57N4CvDOCpYsfWBIaKdWdRngE9VBMYPpj6LayEyGXf_0l5AXfkUXFrsTHkAve0wz5S2INiB4tdUjzcu0Di2B_R-Qk9tx1dk28LWHiFFqFCb3bYc40S9iQ7owzDmrTRPW8Ts8aT0V77SpuyUW_ML43kfdo6F97S6eg5DFdsdQoVCxhp_nCjaQpcQBnbNsdLQZMFeu9My1nUzraYo4BNkN83EVia-q-cX8txZCypi_E0bS9g3b1Yo7BvLktTY0uvZ0PJzncNnQ0zcjr9kR_Kw7ft?"></a></p>
 
 
 

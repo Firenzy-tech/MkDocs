@@ -912,77 +912,7 @@
 </blockquote>
 <hr>
 <h1 id="2-arquitectura-general">2. Arquitectura general</h1>
-<pre class="mermaid"><code>graph TD
-    subgraph Clientes ["📱 Dispositivos y Clientes"]
-        Web["🌐 Aplicación Web (SPA)"]
-        Mobile["📱 Aplicación Móvil (iOS/Android)"]
-        Other["🔌 Clientes Externos / B2B"]
-    end
-
-    Gateway["🛡️ API GATEWAY (Reverse Proxy / Routing / Rate Limiting)"]
-
-    subgraph Servicios ["⚙️ Microservicios de Negocio"]
-        subgraph AuthSvc ["Auth Service"]
-            Auth["🔐 Auth Service"]
-            AuthDB[("🗄️ Auth DB")]
-            Auth --&gt; AuthDB
-        end
-
-        subgraph CustomerSvc ["Customer Service"]
-            Customer["👤 Customer Service"]
-            CustomerDB[("🗄️ Customer DB")]
-            Customer --&gt; CustomerDB
-        end
-
-        subgraph OrderSvc ["Order Service"]
-            Order["📦 Order Service"]
-            OrderDB[("🗄️ Order DB")]
-            Order --&gt; OrderDB
-        end
-
-        subgraph PaymentSvc ["Payment Service"]
-            Payment["💳 Payment Service"]
-            PaymentDB[("🗄️ Payment DB")]
-            Payment --&gt; PaymentDB
-        end
-    end
-
-    Broker{"📨 Message Broker (Kafka / RabbitMQ)"}
-
-    subgraph Consumidores ["⚡ Servicios Asíncronos / Background"]
-        Notification["🔔 Notification Service"]
-        Worker["🛠️ Worker Service"]
-        ExtEmail["✉️ Email / SMS Provider"]
-        Notification --&gt; ExtEmail
-    end
-
-    ExtPayment["🏦 Pasarela de Pago (Stripe / PayPal)"]
-    Payment --&gt; ExtPayment
-
-    Obs["📊 Observabilidad Centralizada (OpenTelemetry / Prometheus / Grafana)"]
-
-    Web --&gt;|HTTPS| Gateway
-    Mobile --&gt;|HTTPS| Gateway
-    Other --&gt;|HTTPS| Gateway
-
-    Gateway --&gt;|Enruta| Auth
-    Gateway --&gt;|Enruta| Customer
-    Gateway --&gt;|Enruta| Order
-    Gateway --&gt;|Enruta| Payment
-
-    Customer -.-&gt;|Publica Eventos| Broker
-    Order -.-&gt;|Publica Eventos| Broker
-    Payment -.-&gt;|Publica Eventos| Broker
-
-    Broker -.-&gt;|Consume| Notification
-    Broker -.-&gt;|Consume| Worker
-
-    Servicios -.-&gt;|Métricas &amp; Logs| Obs
-    Consumidores -.-&gt;|Métricas &amp; Logs| Obs
-
-    style Gateway fill:#00897b,stroke:#004d40,stroke-width:2px,color:#ffffff;
-    style Broker fill:#ff8f00,stroke:#e65100,stroke-width:2px,color:#ffffff;
-    style Obs fill:#5e35b1,stroke:#311b92,stroke-width:2px,color:#ffffff;</code></pre>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="https://kroki.io/plantuml/svg/eNqFVV2T0jAUfe-vuMKLO-OuqzOrLM44UmjXHWXBBccH9eFCA2RoE0xSdtHxJ_nkT9g_5k3alALLCA-Qe06ak3M_-k4bVCbP0uCJWbCMwSpFLgK95GKFCjNQMhdJVyrBFLRq8YTNME9NLIW5QdrXGLG5ZPD5uvEMNAp9qpnis9oGvcBE3nExB6NyVgNWOF3inI3MJmWg2NSgmKcsCMo4NLopZ8IwDRvocb2Smhu-lroBqKHANDTjVtyJu_ArAPjaWaV8ilP-8FfAFzaBp6Nh5-S7pdtVM3affWL_4e-ap47VlxNOWmrESkJ0b5gSUsNzCF-Gjj0g41RF_h0EQiakujO8his07A4338TTW7ZmSjMYKnm_oc2d3Czo55YI8JFndCMxP3E3KvdA8_y8dfk6fGPYvWnfLbipW9LnUyXJ4TWfchJD592Q_fTfPWLkAGZdubBf50q19zqhq3CzabiwdcFqKfe4G7nA9vYACRqcoLa3slAvbHhaL4RmGPaiOHREB59SnsXp2xKnOHlSO7-bayMzcqMS4CM7Iqrg40IquBTj13uCKpoXteUdCBuopK7KLXckFZHH9RRYKcYt9pQUBC-jZBxoGOImswVdqSgDOzp87HElHi21lMs9NZ7k9VQsp4g0_chZbguNaW2FhUoumaJC_oCzJbrKnUy46X8qiraAraDovPWy3rtS6DzjiVRUjh398EdQ4QrfvA4kz6EZteKL6LJo3xtp-Iz60nApdu69A9S684tUy71UlaEaKcqQpyR81B_ZLlxzSoCjUksXWDPqRnH8gsg7B3mLPM-6Q2nRqFiKtvWGOJfkzMgovmJ0Ank5xPTEP7zKVvn4feu3FD86BhPb2khDiCeYQJcghSn_iQnSOSQ-YzRzcjuErhTOUNiEDMYsLZJB2-mwXvQ6fhUEduL5k_xoacP78Xg4Cso5dwwuBtsxNPCBersfBH27HQCuAQ6ilRFV355Z5Oytr7A2RGsiSB0U_XQU9i4fJQRlxBN2ct72tbnPKutqiwfVsD1TfL4wxLH-t2Gs0EafQ59RYUx1sK32_zHfMZHYV_I_qVR2RA==?" data-title="Kroki" data-desc-position="bottom"><img alt="Kroki" src="https://kroki.io/plantuml/svg/eNqFVV2T0jAUfe-vuMKLO-OuqzOrLM44UmjXHWXBBccH9eFCA2RoE0xSdtHxJ_nkT9g_5k3alALLCA-Qe06ak3M_-k4bVCbP0uCJWbCMwSpFLgK95GKFCjNQMhdJVyrBFLRq8YTNME9NLIW5QdrXGLG5ZPD5uvEMNAp9qpnis9oGvcBE3nExB6NyVgNWOF3inI3MJmWg2NSgmKcsCMo4NLopZ8IwDRvocb2Smhu-lroBqKHANDTjVtyJu_ArAPjaWaV8ilP-8FfAFzaBp6Nh5-S7pdtVM3affWL_4e-ap47VlxNOWmrESkJ0b5gSUsNzCF-Gjj0g41RF_h0EQiakujO8his07A4338TTW7ZmSjMYKnm_oc2d3Czo55YI8JFndCMxP3E3KvdA8_y8dfk6fGPYvWnfLbipW9LnUyXJ4TWfchJD592Q_fTfPWLkAGZdubBf50q19zqhq3CzabiwdcFqKfe4G7nA9vYACRqcoLa3slAvbHhaL4RmGPaiOHREB59SnsXp2xKnOHlSO7-bayMzcqMS4CM7Iqrg40IquBTj13uCKpoXteUdCBuopK7KLXckFZHH9RRYKcYt9pQUBC-jZBxoGOImswVdqSgDOzp87HElHi21lMs9NZ7k9VQsp4g0_chZbguNaW2FhUoumaJC_oCzJbrKnUy46X8qiraAraDovPWy3rtS6DzjiVRUjh398EdQ4QrfvA4kz6EZteKL6LJo3xtp-Iz60nApdu69A9S684tUy71UlaEaKcqQpyR81B_ZLlxzSoCjUksXWDPqRnH8gsg7B3mLPM-6Q2nRqFiKtvWGOJfkzMgovmJ0Ank5xPTEP7zKVvn4feu3FD86BhPb2khDiCeYQJcghSn_iQnSOSQ-YzRzcjuErhTOUNiEDMYsLZJB2-mwXvQ6fhUEduL5k_xoacP78Xg4Cso5dwwuBtsxNPCBersfBH27HQCuAQ6ilRFV355Z5Oytr7A2RGsiSB0U_XQU9i4fJQRlxBN2ct72tbnPKutqiwfVsD1TfL4wxLH-t2Gs0EafQ59RYUx1sK32_zHfMZHYV_I_qVR2RA==?"></a></p>
 <hr>
 <h1 id="3-estructura-recomendada-del-repositorio">3. Estructura recomendada del repositorio</h1>
 <p>Una opción práctica para una organización con varios microservicios es:</p>
@@ -1150,21 +1080,7 @@
 <hr>
 <h1 id="5-regla-de-dependencias">5. Regla de dependencias</h1>
 <p>La dirección de dependencia debería ser:</p>
-<pre class="mermaid"><code>graph TD
-    API["🚪 Customer.Api&lt;br/&gt;&lt;i&gt;(Controladores, Endpoints, DI)&lt;/i&gt;"]
-    APP["⚙️ Customer.Application&lt;br/&gt;&lt;i&gt;(Casos de Uso, Commands, Queries)&lt;/i&gt;"]
-    DOM["💎 Customer.Domain&lt;br/&gt;&lt;i&gt;(Entidades, Reglas, Value Objects)&lt;/i&gt;"]
-    INF["🔌 Customer.Infrastructure&lt;br/&gt;&lt;i&gt;(EF Core, SQL DB, Repositorios, Broker)&lt;/i&gt;"]
-
-    API --&gt;|Depende de| APP
-    APP --&gt;|Depende de| DOM
-    INF --&gt;|Implementa contratos de| APP
-    INF --&gt;|Usa entidades de| DOM
-
-    style DOM fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px;
-    style APP fill:#bbdefb,stroke:#1565c0,stroke-width:2px;
-    style API fill:#ffe0b2,stroke:#ef6c00,stroke-width:2px;
-    style INF fill:#e1bee7,stroke:#6a1b9a,stroke-width:2px;</code></pre>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="https://kroki.io/plantuml/svg/eNq1WM1y2zYQvuspUPnQSyPXju2kHscTiqISzkiUrJ92puMLREIyagpgAdCO02Ym1x56SqcP0FvPveWqN8mTdAH-gZZsd2pZ9ozNxf4A-y2-Xeq1VFiodBk3vlIXZElQEmPKGg15SVmCBV6iGQ4vF4KnLHJ5zAXa6Tr6x9KQFzji15Qt0BzHklgruZlgRKC9fWshAad4QcbqJiZIkFBhtohty4jMcRqrLmcqwLCt5pgsOEFTv7lZaUzfE7R30FiPgX5pIPi0uYiIyI9wcHjoHB0YuTbOpftHz_efvyyl2eZmPI4aH2y_IV8mnBGmNnk-PDjyXjiZfC1x5nNH1FoIyhQRcxw-tPlHhIiwwjMsyf88RM2XIwS_ru_u1uLkgoaXjEiJ9lqHjcbX6NUjPmDeGfQdP3isn0ZRIk03lYoviWh1-BLq_5wFq89hTDiUGAqg8kLKmwjLPC7acV96R-53kDuTpKoiSkfn7OTEY4qqm9NTY1ks3GnhR-fMg-DxORtewJr28D2OU4IGs5_ghsjckZHlojVn7VRSk-ZRGhN5znx2hQXFTMH_2dFQjy9oaDwZncxFsQn07NlpLQI6RqmiMX2P1_WMPSjgJKYh1iXxaFyd4bDnu87EHzwFuE5idqooB4RdLLnU-E5lhq0VG-202x2v2y4ALl1N4cKAIZHNYuk2moJgRewqcPlyiVlUlEFtfaOLN0TZ9mcpEUURWUsbTadJdG_0-rrx8OHWCYdcAOq7yJlJJXCoc1U_bMVNTb_wNCIJl1RxcVOr9Uq82XzKqBrMf-DiMttd-WjvrJ4xU3gb_GtNKzv3qdWTcJfmXbFvbXKDM0tjG1fCD7ojZzwZTd3JdOQ9wa3w2VxgADsNVSqAdvxlEsMkwBQG1gMyQZPV3yGDeyMNSmY_aMfba3vei7ULMiRCUqkIC8mdV2Qt2YYsuwgGBZIXqtfdVDsbnHRmLvQ58k5pH-VD7qV8rlyUba85PuuhMRFX-p6U3tqZXXvj1fDeQekyHBszGt5NAobGC63sPFqSCzabFL6doZ_luZCAwN6NnRlTbtUh9XL5lK21cyMrvFmwnW-Ht_0n4WsKzVAQmRXj6h8GxDTyxpOcr309jnjftvc3NWJIg-BxDPV4znZRnzK6tNNrra_ZdkhCWAQ1fIN8ptugaRh9GkUxucb6jnjvQpJoMXoL7BrD7JuzO5fSTZUCQc4gVZiMaWyNbWS-4w29oOMFru-MHw2BTqnepd0Kj5EHKUgVRmHRMVPJtW6lY2otG42O0TSbF9CSRyQ2ExTLJqhGI-OOVuvXTZQLphX11HQrRt2oU4teEBDaPWfwYgHdC5jthiAwoBGO9MDz6JwHg4kDie9tawxlHPYr6OJCIT4vnOrqOZmd5gd7hdzByPlx9Skwgcf-eOL1nZPd2WlVZ5Qwcpw9fvn4F_LKExeS2jhZSkdkEWNp41SslNOj5SOfIgsKzMIFGmZzZ-CvtYWCu8x2MoIvnyv-LUVvJ5Nh-dCFlwdyDZhLRAxbcdmACEgna3sYbnXirONoe87BtO_MKzQYnU2BzJzOYHQvkPkMV2GgR0JqYWI4SBNZCdJkIC0U84lLj3VmvMtcd8gc3hXQ2XT1GyAPy1Thb7KORwSHPCN39ak_QNAsaXnnWk-BwZZHHANDTOYGBeO7yH89EEAw8dxg0Bu8Wf3-wF16uHhLIrOR0e0mL19cSU07rgqdxpZFH97edBdsC35Z9qaK81AMFJyBaMYZjSGNQJbAy7f1ftN6mrvib_2O-NXd8AGQ4TSYDHQsL5iMnI6FyoiEdFZgopkCJD-nRKqimq9SEl_dUpDQ0iUpSSrMkYWvnDTn5SkseG-rORt5b3omaVtt0CZ7M66gda63iixkdxp0nD6kz-np8G7PcwLkjNy3PhS7LvsqpT1D-_msQ-EBJynUGEMXMG1hRGLEsq9BWpm-hujLHx8f_v3zs12L_9km6y15ydfeStC613u0bD95vwoGGnwO46_udSFOcHUvbdxfw7_629B_AULyYMc=?" data-title="Kroki" data-desc-position="bottom"><img alt="Kroki" src="https://kroki.io/plantuml/svg/eNq1WM1y2zYQvuspUPnQSyPXju2kHscTiqISzkiUrJ92puMLREIyagpgAdCO02Ym1x56SqcP0FvPveWqN8mTdAH-gZZsd2pZ9ozNxf4A-y2-Xeq1VFiodBk3vlIXZElQEmPKGg15SVmCBV6iGQ4vF4KnLHJ5zAXa6Tr6x9KQFzji15Qt0BzHklgruZlgRKC9fWshAad4QcbqJiZIkFBhtohty4jMcRqrLmcqwLCt5pgsOEFTv7lZaUzfE7R30FiPgX5pIPi0uYiIyI9wcHjoHB0YuTbOpftHz_efvyyl2eZmPI4aH2y_IV8mnBGmNnk-PDjyXjiZfC1x5nNH1FoIyhQRcxw-tPlHhIiwwjMsyf88RM2XIwS_ru_u1uLkgoaXjEiJ9lqHjcbX6NUjPmDeGfQdP3isn0ZRIk03lYoviWh1-BLq_5wFq89hTDiUGAqg8kLKmwjLPC7acV96R-53kDuTpKoiSkfn7OTEY4qqm9NTY1ks3GnhR-fMg-DxORtewJr28D2OU4IGs5_ghsjckZHlojVn7VRSk-ZRGhN5znx2hQXFTMH_2dFQjy9oaDwZncxFsQn07NlpLQI6RqmiMX2P1_WMPSjgJKYh1iXxaFyd4bDnu87EHzwFuE5idqooB4RdLLnU-E5lhq0VG-202x2v2y4ALl1N4cKAIZHNYuk2moJgRewqcPlyiVlUlEFtfaOLN0TZ9mcpEUURWUsbTadJdG_0-rrx8OHWCYdcAOq7yJlJJXCoc1U_bMVNTb_wNCIJl1RxcVOr9Uq82XzKqBrMf-DiMttd-WjvrJ4xU3gb_GtNKzv3qdWTcJfmXbFvbXKDM0tjG1fCD7ojZzwZTd3JdOQ9wa3w2VxgADsNVSqAdvxlEsMkwBQG1gMyQZPV3yGDeyMNSmY_aMfba3vei7ULMiRCUqkIC8mdV2Qt2YYsuwgGBZIXqtfdVDsbnHRmLvQ58k5pH-VD7qV8rlyUba85PuuhMRFX-p6U3tqZXXvj1fDeQekyHBszGt5NAobGC63sPFqSCzabFL6doZ_luZCAwN6NnRlTbtUh9XL5lK21cyMrvFmwnW-Ht_0n4WsKzVAQmRXj6h8GxDTyxpOcr309jnjftvc3NWJIg-BxDPV4znZRnzK6tNNrra_ZdkhCWAQ1fIN8ptugaRh9GkUxucb6jnjvQpJoMXoL7BrD7JuzO5fSTZUCQc4gVZiMaWyNbWS-4w29oOMFru-MHw2BTqnepd0Kj5EHKUgVRmHRMVPJtW6lY2otG42O0TSbF9CSRyQ2ExTLJqhGI-OOVuvXTZQLphX11HQrRt2oU4teEBDaPWfwYgHdC5jthiAwoBGO9MDz6JwHg4kDie9tawxlHPYr6OJCIT4vnOrqOZmd5gd7hdzByPlx9Skwgcf-eOL1nZPd2WlVZ5Qwcpw9fvn4F_LKExeS2jhZSkdkEWNp41SslNOj5SOfIgsKzMIFGmZzZ-CvtYWCu8x2MoIvnyv-LUVvJ5Nh-dCFlwdyDZhLRAxbcdmACEgna3sYbnXirONoe87BtO_MKzQYnU2BzJzOYHQvkPkMV2GgR0JqYWI4SBNZCdJkIC0U84lLj3VmvMtcd8gc3hXQ2XT1GyAPy1Thb7KORwSHPCN39ak_QNAsaXnnWk-BwZZHHANDTOYGBeO7yH89EEAw8dxg0Bu8Wf3-wF16uHhLIrOR0e0mL19cSU07rgqdxpZFH97edBdsC35Z9qaK81AMFJyBaMYZjSGNQJbAy7f1ftN6mrvib_2O-NXd8AGQ4TSYDHQsL5iMnI6FyoiEdFZgopkCJD-nRKqimq9SEl_dUpDQ0iUpSSrMkYWvnDTn5SkseG-rORt5b3omaVtt0CZ7M66gda63iixkdxp0nD6kz-np8G7PcwLkjNy3PhS7LvsqpT1D-_msQ-EBJynUGEMXMG1hRGLEsq9BWpm-hujLHx8f_v3zs12L_9km6y15ydfeStC613u0bD95vwoGGnwO46_udSFOcHUvbdxfw7_629B_AULyYMc=?"></a></p>
 <p>Conceptualmente:</p>
 <blockquote>
 <p><strong>El Domain es el núcleo estable:</strong> Nunca debe tener dependencias hacia Infrastructure ni frameworks externos. La Infrastructure depende hacia adentro implementando las abstracciones definidas en Application.</p>
@@ -1717,31 +1633,7 @@
 <div class="language-http highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="err">POST /api/customers</span>
 </span></code></pre></div>
 <p>El flujo sería:</p>
-<pre class="mermaid"><code>sequenceDiagram
-    autonumber
-    actor Cliente as 📱 Cliente
-    participant Gateway as 🛡️ API Gateway
-    participant API as 🚪 Customer.Api
-    participant Handler as ⚙️ CreateCustomerHandler
-    participant Domain as 💎 Customer (Domain)
-    participant Repo as 🔌 ICustomerRepository
-    participant DB as 🗄️ PostgreSQL DB
-    participant Broker as 📨 Message Broker
-    participant Consumers as 🔔 Notification / Analytics
-
-    Cliente-&gt;&gt;Gateway: POST /api/customers { "name": "Juan", "email": "..." }
-    Gateway-&gt;&gt;API: Enruta petición HTTPS
-    API-&gt;&gt;Handler: Envía CreateCustomerCommand
-    Handler-&gt;&gt;Domain: Customer.Create(name, email)
-    Domain--&gt;&gt;Handler: Instancia validada + Evento de Dominio
-    Handler-&gt;&gt;Repo: AddAsync(customer)
-    Repo-&gt;&gt;DB: INSERT INTO customers (...)
-    DB--&gt;&gt;Repo: Confirmado (Commit)
-    Handler-&gt;&gt;Broker: Publica CustomerCreatedEvent (Transactional Outbox)
-    Broker--&gt;&gt;Consumers: Distribuye evento a suscriptores
-    Handler--&gt;&gt;API: Result.Success(customerId)
-    API--&gt;&gt;Gateway: 201 Created { "id": "..." }
-    Gateway--&gt;&gt;Cliente: 201 Created</code></pre>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="https://kroki.io/plantuml/svg/eNqtV1Fv2zYQfuev4OyHJejiJEXaukETVJLpVlhsqZaCbkCAgZEYh4hEuhSVzCj6k_rUn5A_tpNEqZSXtQNsPyQydd8d77vvjvTbQlOlyzxD6Bd9y3KGVxnlAtFSS1Hm10whVNxxsaKK5ljJUqSeVIIpPLbWU3ZDy0xPpdBzCj4GEVtKhi_9gWVU3NJUPnCxxDc0K5j9hn0qmUjYjBUFXTIn40uBEyY0RLeCs2IlRdFauSyTD45S8gFrVTJ7mzTRUuHPCMPHlSplypMZrAxPXrxwXp406zS5W5p86nfEI9PpMfpiO4K_mid8RYX-gbseJKWaXtOC_V97yLz8ifGv-GyLD8AdLw4WJMJ_Yi-YhcGczGMSbesWNSwPvIxXlcKzx2_3PMOH-CO7HmBa4OYFQjaJAyf08Tuq2QNd10bmGQ-PjsavX7l9Y68stMyZGjkrXltX6OF0So7c5xt-PcXAUwt4T0WaMVVjzDMeuu6ETF30dIgr8ebNROYgfUyE5np9fl6jzdrQG5OX3usNsN-iF2wlCw50rCs_oVTawKsXIK1jl5BXCHXaGISy0EvFog8XV6J1giduE9LtxIgadQyM5LGr5J1Jq3ls2BhvsjGXmt_whGouBVTEETRbw9ui2p0HPVRCuMJssfsOvsZTZ-rtQHAL8uGSRPHWEmskhA_OO52c4jCIYnxIV_wwMcRBWp-xgLnzG2ZQrQx_qcXJ7wHTAhFqPYCzSkanUGdVaopXrOLt8ZvA7-M4jCwomO2i-cLwwvec2A_mW_NRbRz230r6FPdl78k8h1dWCsZyB2lMgpnjb59Bu3XIwrQWJNG2eZPNnlXKfSuXxh4hgzvoE9E20T3NeAoHzZV41kYg9_UcStm_XG3NSkgWkR_FZO75zi65qefGKXbS1CnWItlrpW7zUdkgVFtWbLpg75J3_hzHC2cewcyvFGfR524Y-_OILGL4Fwe4ayW8NxqN9n9gKUt9Lf_-K28mUmcPdgff9w3HzMyP-5R34Z-u2wqC80LzVPZgTZI7GEhRWE0kp27y3VWqGyYLVsAFaBSVSQLMdPXy0_1eOl0_1p3cm2vPj45NO6fVPONpNcYsaD2NuiEGUDMcf47sRuDWNFrKci5wcBm7wR9bk3l2hkMlgTaaVwlJOJQev4pESSHhYpnhoFYcrkx7h5xZ_yhVeyaaleHk2DshcFib762MI3JBvBiUJtLqFtpKeKNHjJIN9rtCDcNPDBPXjmTOZTinyuuMF7d7T-HtNm4ACBlgL7bj_d4L1dpuXUgvmEeXM39SXQu3LmC783PrLvFfvHWpdKZwyneoDRf2NeZKWLcYp0x5vwiWu7dQ3-oHzT8pes6b?" data-title="Kroki" data-desc-position="bottom"><img alt="Kroki" src="https://kroki.io/plantuml/svg/eNqtV1Fv2zYQfuev4OyHJejiJEXaukETVJLpVlhsqZaCbkCAgZEYh4hEuhSVzCj6k_rUn5A_tpNEqZSXtQNsPyQydd8d77vvjvTbQlOlyzxD6Bd9y3KGVxnlAtFSS1Hm10whVNxxsaKK5ljJUqSeVIIpPLbWU3ZDy0xPpdBzCj4GEVtKhi_9gWVU3NJUPnCxxDc0K5j9hn0qmUjYjBUFXTIn40uBEyY0RLeCs2IlRdFauSyTD45S8gFrVTJ7mzTRUuHPCMPHlSplypMZrAxPXrxwXp406zS5W5p86nfEI9PpMfpiO4K_mid8RYX-gbseJKWaXtOC_V97yLz8ifGv-GyLD8AdLw4WJMJ_Yi-YhcGczGMSbesWNSwPvIxXlcKzx2_3PMOH-CO7HmBa4OYFQjaJAyf08Tuq2QNd10bmGQ-PjsavX7l9Y68stMyZGjkrXltX6OF0So7c5xt-PcXAUwt4T0WaMVVjzDMeuu6ETF30dIgr8ebNROYgfUyE5np9fl6jzdrQG5OX3usNsN-iF2wlCw50rCs_oVTawKsXIK1jl5BXCHXaGISy0EvFog8XV6J1giduE9LtxIgadQyM5LGr5J1Jq3ls2BhvsjGXmt_whGouBVTEETRbw9ui2p0HPVRCuMJssfsOvsZTZ-rtQHAL8uGSRPHWEmskhA_OO52c4jCIYnxIV_wwMcRBWp-xgLnzG2ZQrQx_qcXJ7wHTAhFqPYCzSkanUGdVaopXrOLt8ZvA7-M4jCwomO2i-cLwwvec2A_mW_NRbRz230r6FPdl78k8h1dWCsZyB2lMgpnjb59Bu3XIwrQWJNG2eZPNnlXKfSuXxh4hgzvoE9E20T3NeAoHzZV41kYg9_UcStm_XG3NSkgWkR_FZO75zi65qefGKXbS1CnWItlrpW7zUdkgVFtWbLpg75J3_hzHC2cewcyvFGfR524Y-_OILGL4Fwe4ayW8NxqN9n9gKUt9Lf_-K28mUmcPdgff9w3HzMyP-5R34Z-u2wqC80LzVPZgTZI7GEhRWE0kp27y3VWqGyYLVsAFaBSVSQLMdPXy0_1eOl0_1p3cm2vPj45NO6fVPONpNcYsaD2NuiEGUDMcf47sRuDWNFrKci5wcBm7wR9bk3l2hkMlgTaaVwlJOJQev4pESSHhYpnhoFYcrkx7h5xZ_yhVeyaaleHk2DshcFib762MI3JBvBiUJtLqFtpKeKNHjJIN9rtCDcNPDBPXjmTOZTinyuuMF7d7T-HtNm4ACBlgL7bj_d4L1dpuXUgvmEeXM39SXQu3LmC783PrLvFfvHWpdKZwyneoDRf2NeZKWLcYp0x5vwiWu7dQ3-oHzT8pes6b?"></a></p>
 <hr>
 <h1 id="23-reglas-de-oro">23. Reglas de oro</h1>
 <h2 id="regla-1">Regla 1</h2>
@@ -1818,63 +1710,10 @@
 </span></code></pre></div>
 <hr>
 <h1 id="25-resumen-visual">25. Resumen visual</h1>
-<pre class="mermaid"><code>graph TD
-    Platform["🏢 MICROSERVICES PLATFORM"]
-
-    Docs["📚 docs/&lt;br/&gt;&lt;i&gt;(ADRs, Arquitectura)&lt;/i&gt;"]
-    Gateway["🛡️ gateway/&lt;br/&gt;&lt;i&gt;(API Gateway / Ingress)&lt;/i&gt;"]
-    Services["⚙️ services/&lt;br/&gt;&lt;i&gt;(Identity, Customer, Order, Payment, ...)&lt;/i&gt;"]
-    BuildingBlocks["🧱 building-blocks/&lt;br/&gt;&lt;i&gt;(Shared Kernel, Observability)&lt;/i&gt;"]
-    Infra["☁️ infrastructure/&lt;br/&gt;&lt;i&gt;(K8s, Docker, Terraform)&lt;/i&gt;"]
-    Scripts["📜 scripts/&lt;br/&gt;&lt;i&gt;(CI/CD, Migraciones, Dev)&lt;/i&gt;"]
-
-    Platform --&gt; Docs
-    Platform --&gt; Gateway
-    Platform --&gt; Services
-    Platform --&gt; BuildingBlocks
-    Platform --&gt; Infra
-    Platform --&gt; Scripts
-
-    subgraph CadaServicio ["📦 Anatomía de Cada Servicio"]
-        direction LR
-        Svc["Microservicio"]
-        DB[("🗄️ Base de Datos Propia")]
-        MB{"📨 Message Broker"}
-        Ext["🔌 APIs Externas"]
-        Obs["📊 Observabilidad"]
-
-        Svc --&gt; DB
-        Svc --&gt; MB
-        Svc --&gt; Ext
-        Svc --&gt; Obs
-    end
-
-    Services -.-&gt; CadaServicio</code></pre>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="https://kroki.io/plantuml/svg/eNplVNtuGjEQfd-vmMJLq0JCIyUhqVSFvVWrlAZB2pc0D8N62LVYbGJ7c1GVT-pX9Mc6NpsINSAhGJ_LjOewF9ahce2mid65mjYE2waliuxaqi0a3IDRrRKJNooMjPfqglbYNi7Xyn1H5vUWVGmCH0VvABaVHVoycrVHsDUK_SBVBc60tHewxXKNFS3cU0NgqHSoqoaiqKtDb1ok86tFNv9ZJNkCZt8m1_nVfNoDtDBr0K202UA_H-eTPIHfEcCN0KU9_KXeT9K5HcDE3LXSsW5r8MOtZ6V8zozw8vgKHT3gU6DMCvi6-wmHUKjKkLU71ku5PxqNz07jz44e3flDzdJeg8e9lyUF30KQctI9DeDKCDLcQ9Japzfh68HBwU5v0TGgn43yo_yTV1m2shF8R8Nlo8t1EFvUaEjAJfEKGlZceidcyoYNdkJxwO4PJNXKoOV79kOTV7kcszXPvSYzgGsyBv217fiFR-_TbWnk1gX3pDhM0gFMZWWwlFqRl6H7boId7pXK3NelTRTyxH__ICcFEhTYzSt1WFyGZb24L5l67N9hb-w8laXRtgNC2MZH4PRRZ-gZcZxmeRzwAh0u0bJd7D_ZKWVXjoXRW4nBKI2hn4yzk-QsMO5aan2keKu-zdhovpEAnMZ-jmw0PgrAstGt4DFmBTf76Pj20e46f3S8sSTLw8YAlGbb3t5aBIoA5BID0-w0P4kC0nc_5P-AGn7htt6Upm9L7PWmxrJce46eoyjkeHhTS8GBu-3Ou5hGL3H9__wldtFr_oZGVrXzdt1SzqHYbBt-GiiH0QUp4Z8P_wBkLVQQ?" data-title="Kroki" data-desc-position="bottom"><img alt="Kroki" src="https://kroki.io/plantuml/svg/eNplVNtuGjEQfd-vmMJLq0JCIyUhqVSFvVWrlAZB2pc0D8N62LVYbGJ7c1GVT-pX9Mc6NpsINSAhGJ_LjOewF9ahce2mid65mjYE2waliuxaqi0a3IDRrRKJNooMjPfqglbYNi7Xyn1H5vUWVGmCH0VvABaVHVoycrVHsDUK_SBVBc60tHewxXKNFS3cU0NgqHSoqoaiqKtDb1ok86tFNv9ZJNkCZt8m1_nVfNoDtDBr0K202UA_H-eTPIHfEcCN0KU9_KXeT9K5HcDE3LXSsW5r8MOtZ6V8zozw8vgKHT3gU6DMCvi6-wmHUKjKkLU71ku5PxqNz07jz44e3flDzdJeg8e9lyUF30KQctI9DeDKCDLcQ9Japzfh68HBwU5v0TGgn43yo_yTV1m2shF8R8Nlo8t1EFvUaEjAJfEKGlZceidcyoYNdkJxwO4PJNXKoOV79kOTV7kcszXPvSYzgGsyBv217fiFR-_TbWnk1gX3pDhM0gFMZWWwlFqRl6H7boId7pXK3NelTRTyxH__ICcFEhTYzSt1WFyGZb24L5l67N9hb-w8laXRtgNC2MZH4PRRZ-gZcZxmeRzwAh0u0bJd7D_ZKWVXjoXRW4nBKI2hn4yzk-QsMO5aan2keKu-zdhovpEAnMZ-jmw0PgrAstGt4DFmBTf76Pj20e46f3S8sSTLw8YAlGbb3t5aBIoA5BID0-w0P4kC0nc_5P-AGn7htt6Upm9L7PWmxrJce46eoyjkeHhTS8GBu-3Ou5hGL3H9__wldtFr_oZGVrXzdt1SzqHYbBt-GiiH0QUp4Z8P_wBkLVQQ?"></a></p>
 <h2 id="principio-final">Principio final</h2>
 <p>La estructura de carpetas no hace que un sistema sea un buen sistema de microservicios. La arquitectura debe proteger principalmente estos límites:</p>
-<pre class="mermaid"><code>graph TD
-    subgraph BusinessBoundary ["🛡️ FRONTERA DE NEGOCIO (Bounded Context)"]
-        subgraph Microservice ["📦 Microservicio Autónomo"]
-            direction TB
-            subgraph StableCore ["💎 Núcleo Estable (Sin dependencias externas)"]
-                DOM["Domain (Reglas &amp; Entidades)"]
-                APP["Application (Casos de Uso)"]
-                APP --&gt; DOM
-            end
-
-            subgraph InfraOuter ["🔌 Infraestructura (Periferia intercambiable)"]
-                INF_DB[("🗄️ Base de Datos")]
-                INF_MB{"📨 Broker"}
-                INF_EXT["🌐 APIs Externas"]
-            end
-
-            APP -.-&gt;|Define Interfaces| InfraOuter
-        end
-    end
-
-    style BusinessBoundary fill:#f1f8e9,stroke:#558b2f,stroke-width:3px;
-    style StableCore fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
-    style InfraOuter fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px;</code></pre>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="https://kroki.io/plantuml/svg/eNpdks-O0zAQxu95iqGVUCvRlRAq6nJYbZM4KIf-UcuegMOsM8maJnawnYUV2kfixI1rX4xxml11seRInszP_r7PvnYere-aOnrl76ghaGtUOnIHpVu02IA1nS4SYzVZWJzVCyqxq31mtF8jc6M9VYbgJh-9AYfazRxZVZ4B7g4L80PpCrzt6OxHi_KAFe39Q01gSXrUVU1RNNRhlO02609it4RUwFp83CT5BiZx0EUFJCyAfvrpCNBBX0T7AOPsbbYQl_ArAnjeZ6WkNSzrXkllYNn54x9tGtOT-3vJUD966AxbH__KmgwIjuqWJU72SrP9lvh8LRXDfD5Zje4kgsMiGItFNh8EhPE5NQ0HC5MdVTU3vQahvSqwIDf9Gqh0s4JxshDvk8snZNm2tZLolWEuQWccHws3zpyI5XYL4zhORRYPRKjMOGQ9uwr79dXH6KWbXJcWyfEdSN9ZhMk23BNPBMVJWonNrQo-T2b6dk7mnZhn82c3BXIU6Hi7OHxZVYreuJ5I46cgh-bvHXWh05oDvyHuXZF2-I3s8Tf2xOp_QtamK2C03OYOxJBt38mLF62DueD7Ivi-uBoEf4CUSqWJl4yXKMl90ZM0306jQD1G13x74dX_A8lE8Pc=?" data-title="Kroki" data-desc-position="bottom"><img alt="Kroki" src="https://kroki.io/plantuml/svg/eNpdks-O0zAQxu95iqGVUCvRlRAq6nJYbZM4KIf-UcuegMOsM8maJnawnYUV2kfixI1rX4xxml11seRInszP_r7PvnYere-aOnrl76ghaGtUOnIHpVu02IA1nS4SYzVZWJzVCyqxq31mtF8jc6M9VYbgJh-9AYfazRxZVZ4B7g4L80PpCrzt6OxHi_KAFe39Q01gSXrUVU1RNNRhlO02609it4RUwFp83CT5BiZx0EUFJCyAfvrpCNBBX0T7AOPsbbYQl_ArAnjeZ6WkNSzrXkllYNn54x9tGtOT-3vJUD966AxbH__KmgwIjuqWJU72SrP9lvh8LRXDfD5Zje4kgsMiGItFNh8EhPE5NQ0HC5MdVTU3vQahvSqwIDf9Gqh0s4JxshDvk8snZNm2tZLolWEuQWccHws3zpyI5XYL4zhORRYPRKjMOGQ9uwr79dXH6KWbXJcWyfEdSN9ZhMk23BNPBMVJWonNrQo-T2b6dk7mnZhn82c3BXIU6Hi7OHxZVYreuJ5I46cgh-bvHXWh05oDvyHuXZF2-I3s8Tf2xOp_QtamK2C03OYOxJBt38mLF62DueD7Ivi-uBoEf4CUSqWJl4yXKMl90ZM0306jQD1G13x74dX_A8lE8Pc=?"></a></p>
 <p><strong>Si los límites son buenos, la estructura de carpetas simplemente los hace visibles.</strong></p>
 
 

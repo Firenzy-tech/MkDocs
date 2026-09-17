@@ -1179,33 +1179,7 @@
 <blockquote>
 <p><strong>Definición de Evento:</strong> Un registro inmutable de que algo relevante ha ocurrido en el pasado dentro del dominio (ej. <code>PedidoPagado</code>, <code>UsuarioRegistrado</code>, <code>InventarioAgotado</code>). Los eventos se nombran siempre en tiempo pasado.</p>
 </blockquote>
-<pre class="mermaid"><code>graph LR
-    subgraph Productores
-        P1[Servicio de Pedidos]
-        P2[Servicio de Pagos]
-    end
-
-    subgraph "Broker de Eventos / Streaming"
-        Topic1[(Topic: orders.events)]
-        Topic2[(Topic: payments.events)]
-    end
-
-    subgraph Consumidores Desacoplados
-        C1[Servicio de Envíos]
-        C2[Servicio de Notificaciones]
-        C3[Analytics / Data Lake]
-        C4[Motor Antifraude]
-    end
-
-    P1 --&gt;|Publica PedidoCreado| Topic1
-    P2 --&gt;|Publica PagoAprobado| Topic2
-
-    Topic1 --&gt;|Consume| C1
-    Topic1 --&gt;|Consume| C2
-    Topic1 --&gt;|Consume| C3
-
-    Topic2 --&gt;|Consume| C1
-    Topic2 --&gt;|Consume| C4</code></pre>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="https://kroki.io/plantuml/svg/eNp9k89u00AQxu9-iiG9EihOkUIPqMGxJSSoIgVOiMPUO3FWsXfM_gmKEI_EU_BinXXcaJFFfdv9ft_szDfynfNofeja7IXfU0fQt6hN5g7a9GixA8vBqIKtIQvL5F7RDkPrKzb-HsU321LDBF8_zl6CQ-PmjqzeJQa3R8U_tWnA20CJ0GN9wIa2_tQSWKo9mqalLBvvYbaxrELt2ZKbATqIZ7gqF1VereFXBvBtS_aoa83SFWxIacXu-0C-gatq-CYUNk9MfmF-J49-sHyQkQUtj2Q8O3gNW28JOxlhaGMkonlRXg-N_AgUxPuFe13fAltF1r2i6D93PghDT-X1Mp8Yejx1kZ1Y8oslbbFg40Inw0owsCaHNcv2ZPbBGFVJaVm9Ld9NUyrN8e-fMYHivynds9c7XaMcDY1wnsIrg-3J6zqms0aP8AkPdOYWKfeZZX2wMlLOYlAjcpMmL7uaW93s_fz9U063sAkPrbw_LrWQ-BVnsrF_yTwlZbGr3vJDJLOx0AUvYtFzbjQV8-fERSJm47PP1E3Fm0S8I6Pi7_YI6PQfAg==?" data-title="Kroki" data-desc-position="bottom"><img alt="Kroki" src="https://kroki.io/plantuml/svg/eNp9k89u00AQxu9-iiG9EihOkUIPqMGxJSSoIgVOiMPUO3FWsXfM_gmKEI_EU_BinXXcaJFFfdv9ft_szDfynfNofeja7IXfU0fQt6hN5g7a9GixA8vBqIKtIQvL5F7RDkPrKzb-HsU321LDBF8_zl6CQ-PmjqzeJQa3R8U_tWnA20CJ0GN9wIa2_tQSWKo9mqalLBvvYbaxrELt2ZKbATqIZ7gqF1VereFXBvBtS_aoa83SFWxIacXu-0C-gatq-CYUNk9MfmF-J49-sHyQkQUtj2Q8O3gNW28JOxlhaGMkonlRXg-N_AgUxPuFe13fAltF1r2i6D93PghDT-X1Mp8Yejx1kZ1Y8oslbbFg40Inw0owsCaHNcv2ZPbBGFVJaVm9Ld9NUyrN8e-fMYHivynds9c7XaMcDY1wnsIrg-3J6zqms0aP8AkPdOYWKfeZZX2wMlLOYlAjcpMmL7uaW93s_fz9U063sAkPrbw_LrWQ-BVnsrF_yTwlZbGr3vJDJLOx0AUvYtFzbjQV8-fERSJm47PP1E3Fm0S8I6Pi7_YI6PQfAg==?"></a></p>
 <hr>
 <h2 id="2-tipos-de-eventos">2. Tipos de Eventos</h2>
 <p>No todos los eventos se diseñan de la misma forma:</p>
@@ -1243,34 +1217,7 @@
 <h2 id="3-patrones-arquitectonicos-clave">3. Patrones Arquitectónicos Clave</h2>
 <h3 id="31-patron-cqrs-command-query-responsibility-segregation">3.1. Patrón CQRS (Command Query Responsibility Segregation)</h3>
 <p>Separa explícitamente las operaciones que <strong>modifican datos (Commands)</strong> de las operaciones que <strong>leen datos (Queries)</strong>, permitiendo escalar y optimizar cada modelo de manera independiente:</p>
-<pre class="mermaid"><code>graph TD
-    Client[Cliente / Frontend]
-
-    subgraph "Lado de Escritura (Commands)"
-        Command[CreateOrderCommand]
-        CommandHandler[CreateOrderHandler]
-        WriteDB[(Base de Datos Transaccional - SQL / ACID)]
-    end
-
-    subgraph "Sincronización Asíncrona"
-        OutboxEvent[OrderCreatedEvent]
-        Projector[Projector Worker]
-    end
-
-    subgraph "Lado de Lectura (Queries)"
-        ReadDB[(Base de Datos de Lectura - NoSQL / Elastic / Redis)]
-        QueryHandler[GetOrderDetailsQueryHandler]
-    end
-
-    Client --&gt;|POST /orders| Command
-    Command --&gt; CommandHandler
-    CommandHandler --&gt; WriteDB
-    WriteDB -.-&gt; OutboxEvent
-    OutboxEvent --&gt; Projector
-    Projector --&gt;|Actualiza Vista Optimizada| ReadDB
-
-    Client --&gt;|GET /orders/123| QueryHandler
-    QueryHandler --&gt;|Consulta rápida desnormalizada| ReadDB</code></pre>
+<p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="https://kroki.io/plantuml/svg/eNp1VE1T1EAQvc-vaHcvWOUCBaW17IGCzQdSBfIRlIN6aDLN7kgys85MVKT4SZ78CfwxO5NkN6yaQ5Lqed393utODpxH66uyEC_8nEqCRYFKC3en9AItlmBNpWVkrCYL415c0i1WhU-N9u-Q8wYZzQzB--PBK3Co3ciRVbe9BDdHab4rPQNvK-odLDC_wxll_r4gsJR71LOChMDcGwuDqFCkPcEWpJabkZYDQAdNWIg2GwYnXJ5ZQeJyq3xlETYiU5aopXsZMq45TJliyDDZTXfSGB4EwMfIEno6s5Jsi_8c6jfvMEzDtYZ8y0cF2T6yDfUSJHq8QcfcpvWdG8fojYMry_5gniujsfikN86N8zNL2cUJizyMjuMe33gKw-k0TtKpeOyJzZTO2Q31E3P19FvDoXv6FSIYUrN7nQciu8l2UPm1oorTGpVBhky-sX_cvWXjAxs4q_yN-dEQaN4Dri6WbI93ahvOrflCYTbXxt61JqyCnf7Hf8zmhCFhMhcVbwe1g7kklO1cxunrZC8w_p95qyrMPSnQeZU7QpvP2bxLksqFJ0q-LQqV46pH7WU0Tt5Ee7WMI_LBjpg8qsLVjO77Y-0H-qKaxYMRL7Me7S_3ZALnZ9kVbJm6phNdeA3W1hNrO9OhupFPAl75sA2ii25aNZv7zf1ng2FoHLHkJib6R6OA57LL4YjVmLqWrTETOGRTseCNgg-KfwpwyktiVYhI_Ev2M3cmcJQspW89KPkonp0viSybdYtgFl6VoQOQhtKJA_6-67_RH_vajJU=?" data-title="Kroki" data-desc-position="bottom"><img alt="Kroki" src="https://kroki.io/plantuml/svg/eNp1VE1T1EAQvc-vaHcvWOUCBaW17IGCzQdSBfIRlIN6aDLN7kgys85MVKT4SZ78CfwxO5NkN6yaQ5Lqed393utODpxH66uyEC_8nEqCRYFKC3en9AItlmBNpWVkrCYL415c0i1WhU-N9u-Q8wYZzQzB--PBK3Co3ciRVbe9BDdHab4rPQNvK-odLDC_wxll_r4gsJR71LOChMDcGwuDqFCkPcEWpJabkZYDQAdNWIg2GwYnXJ5ZQeJyq3xlETYiU5aopXsZMq45TJliyDDZTXfSGB4EwMfIEno6s5Jsi_8c6jfvMEzDtYZ8y0cF2T6yDfUSJHq8QcfcpvWdG8fojYMry_5gniujsfikN86N8zNL2cUJizyMjuMe33gKw-k0TtKpeOyJzZTO2Q31E3P19FvDoXv6FSIYUrN7nQciu8l2UPm1oorTGpVBhky-sX_cvWXjAxs4q_yN-dEQaN4Dri6WbI93ahvOrflCYTbXxt61JqyCnf7Hf8zmhCFhMhcVbwe1g7kklO1cxunrZC8w_p95qyrMPSnQeZU7QpvP2bxLksqFJ0q-LQqV46pH7WU0Tt5Ee7WMI_LBjpg8qsLVjO77Y-0H-qKaxYMRL7Me7S_3ZALnZ9kVbJm6phNdeA3W1hNrO9OhupFPAl75sA2ii25aNZv7zf1ng2FoHLHkJib6R6OA57LL4YjVmLqWrTETOGRTseCNgg-KfwpwyktiVYhI_Ev2M3cmcJQspW89KPkonp0viSybdYtgFl6VoQOQhtKJA_6-67_RH_vajJU=?"></a></p>
 <hr>
 <h3 id="32-patron-transactional-outbox">3.2. Patrón Transactional Outbox</h3>
 <p>Uno de los mayores desafíos en arquitecturas distribuidas es: <strong>¿Cómo actualizar la base de datos local y publicar un evento en el broker de forma atómica sin soporte de 2-Phase Commit (2PC)?</strong></p>
