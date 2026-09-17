@@ -1,6 +1,90 @@
-site_name: Arquitectura
+site_name: Arquitecturas de Software
+site_description: Portal de referencia, guías técnicas, patrones y comparativa de arquitecturas de software modernas.
+site_author: Equipo de Arquitectura
+
 theme:
   name: material
+  language: es
   palette:
-    primary: teal   # Color de la barra superior y enlaces
-    accent: amber   # Color de los botones y elementos interactivos
+    # Paleta modo claro
+    - scheme: default
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Cambiar a modo oscuro
+    # Paleta modo oscuro
+    - scheme: slate
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Cambiar a modo claro
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.path
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+plugins:
+  - search
+  - glightbox:
+      touchNavigation: true
+      loop: false
+      effect: zoom
+      slide_effect: slide
+      width: 100%
+      height: auto
+      zoomable: true
+      draggable: true
+      auto_caption: true
+      caption_position: bottom
+  - kroki:
+      server_url: https://kroki.io
+      fence_prefix: ""
+      enable_mermaid: false
+
+extra_css:
+  - stylesheets/diagrams.css
+
+extra_javascript:
+  - javascripts/diagram-interactions.js
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - tables
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+nav:
+  - Inicio: index.md
+  - Arquitecturas de Backend:
+      - Microservicios: microservicios.md
+      - Monolito Modular: monolito-modular.md
+      - Arquitectura Hexagonal: arquitectura-hexagonal.md
+      - Orientada a Eventos (EDA): event-driven.md
+      - Serverless y Cloud-Native: arquitectura-serverless.md
+  - Frontend:
+      - Microfrontends: microfrontends.md
+  - Evaluación y Selección:
+      - Matriz Comparativa: comparativa-arquitecturas.md
