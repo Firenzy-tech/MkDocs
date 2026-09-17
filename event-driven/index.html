@@ -1,0 +1,1434 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Portal de referencia, guías técnicas, patrones y comparativa de arquitecturas de software modernas.">
+      
+      
+        <meta name="author" content="Equipo de Arquitectura">
+      
+      
+      
+        <link rel="prev" href="../arquitectura-hexagonal/">
+      
+      
+        <link rel="next" href="../arquitectura-serverless/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Orientada a Eventos (EDA) - Arquitecturas de Software</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#arquitectura-orientada-a-eventos-eda-cqrs-y-sagas" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href=".." title="Arquitecturas de Software" class="md-header__button md-logo" aria-label="Arquitecturas de Software" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Arquitecturas de Software
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Orientada a Eventos (EDA)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="amber"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="amber"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Inicio
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../microservicios/" class="md-tabs__link">
+          
+  
+  
+  Arquitecturas de Backend
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../microfrontends/" class="md-tabs__link">
+          
+  
+  
+  Frontend
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../comparativa-arquitecturas/" class="md-tabs__link">
+          
+  
+  
+  Evaluación y Selección
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Arquitecturas de Software" class="md-nav__button md-logo" aria-label="Arquitecturas de Software" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Arquitecturas de Software
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arquitecturas de Backend
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Arquitecturas de Backend
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../microservicios/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Microservicios
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monolito-modular/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monolito Modular
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arquitectura-hexagonal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arquitectura Hexagonal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Orientada a Eventos (EDA)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Orientada a Eventos (EDA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-fundamentos-de-event-driven-architecture-eda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Fundamentos de Event-Driven Architecture (EDA)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-tipos-de-eventos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Tipos de Eventos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-patrones-arquitectonicos-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Patrones Arquitectónicos Clave
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Patrones Arquitectónicos Clave">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-patron-cqrs-command-query-responsibility-segregation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Patrón CQRS (Command Query Responsibility Segregation)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-patron-transactional-outbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Patrón Transactional Outbox
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-transacciones-distribuidas-el-patron-saga" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3. Transacciones Distribuidas: El Patrón Saga
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3. Transacciones Distribuidas: El Patrón Saga">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-coreografia-choreography" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. Coreografía (Choreography)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-orquestacion-orchestration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. Orquestación (Orchestration)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-resiliencia-idempotencia-y-dead-letter-queues-dlq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Resiliencia: Idempotencia y Dead Letter Queues (DLQ)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Resiliencia: Idempotencia y Dead Letter Queues (DLQ)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#idempotencia-en-el-consumidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Idempotencia en el Consumidor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dead-letter-queue-dlq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dead Letter Queue (DLQ)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-comparativa-de-message-brokers-y-event-streaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Comparativa de Message Brokers y Event Streaming
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arquitectura-serverless/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Serverless y Cloud-Native
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frontend
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frontend
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../microfrontends/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Microfrontends
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluación y Selección
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Evaluación y Selección
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../comparativa-arquitecturas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Matriz Comparativa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-fundamentos-de-event-driven-architecture-eda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Fundamentos de Event-Driven Architecture (EDA)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-tipos-de-eventos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Tipos de Eventos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-patrones-arquitectonicos-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Patrones Arquitectónicos Clave
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Patrones Arquitectónicos Clave">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-patron-cqrs-command-query-responsibility-segregation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Patrón CQRS (Command Query Responsibility Segregation)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-patron-transactional-outbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Patrón Transactional Outbox
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-transacciones-distribuidas-el-patron-saga" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3. Transacciones Distribuidas: El Patrón Saga
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3. Transacciones Distribuidas: El Patrón Saga">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-coreografia-choreography" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. Coreografía (Choreography)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-orquestacion-orchestration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. Orquestación (Orchestration)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-resiliencia-idempotencia-y-dead-letter-queues-dlq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Resiliencia: Idempotencia y Dead Letter Queues (DLQ)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Resiliencia: Idempotencia y Dead Letter Queues (DLQ)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#idempotencia-en-el-consumidor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Idempotencia en el Consumidor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dead-letter-queue-dlq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dead Letter Queue (DLQ)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-comparativa-de-message-brokers-y-event-streaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Comparativa de Message Brokers y Event Streaming
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navegación" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href=".." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Inicio
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../microservicios/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Arquitecturas de Backend
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="arquitectura-orientada-a-eventos-eda-cqrs-y-sagas">Arquitectura Orientada a Eventos (EDA, CQRS y Sagas)</h1>
+<h2 id="1-fundamentos-de-event-driven-architecture-eda">1. Fundamentos de Event-Driven Architecture (EDA)</h2>
+<p>La <strong>Arquitectura Orientada a Eventos (EDA)</strong> es un paradigma en el que los componentes de software reaccionan a la captura, procesamiento y persistencia de <strong>eventos significativos del negocio</strong> en lugar de comunicarse exclusivamente mediante peticiones síncronas de bloqueo (como HTTP REST o RPC).</p>
+<blockquote>
+<p><strong>Definición de Evento:</strong> Un registro inmutable de que algo relevante ha ocurrido en el pasado dentro del dominio (ej. <code>PedidoPagado</code>, <code>UsuarioRegistrado</code>, <code>InventarioAgotado</code>). Los eventos se nombran siempre en tiempo pasado.</p>
+</blockquote>
+<pre class="mermaid"><code>graph LR
+    subgraph Productores
+        P1[Servicio de Pedidos]
+        P2[Servicio de Pagos]
+    end
+
+    subgraph "Broker de Eventos / Streaming"
+        Topic1[(Topic: orders.events)]
+        Topic2[(Topic: payments.events)]
+    end
+
+    subgraph Consumidores Desacoplados
+        C1[Servicio de Envíos]
+        C2[Servicio de Notificaciones]
+        C3[Analytics / Data Lake]
+        C4[Motor Antifraude]
+    end
+
+    P1 --&gt;|Publica PedidoCreado| Topic1
+    P2 --&gt;|Publica PagoAprobado| Topic2
+
+    Topic1 --&gt;|Consume| C1
+    Topic1 --&gt;|Consume| C2
+    Topic1 --&gt;|Consume| C3
+
+    Topic2 --&gt;|Consume| C1
+    Topic2 --&gt;|Consume| C4</code></pre>
+<hr />
+<h2 id="2-tipos-de-eventos">2. Tipos de Eventos</h2>
+<p>No todos los eventos se diseñan de la misma forma:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Tipo de Evento</th>
+<th style="text-align: left;">Descripción</th>
+<th style="text-align: left;">Payload</th>
+<th style="text-align: left;">Caso de Uso Típico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Event Notification</strong></td>
+<td style="text-align: left;">Notifica que algo ocurrió con mínima información.</td>
+<td style="text-align: left;">Ligero (solo IDs: <code>{ "orderId": "123" }</code>)</td>
+<td style="text-align: left;">Cuando los consumidores deben consultar al productor si necesitan detalles. Menor acoplamiento de esquema.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Event-Carried State Transfer (ECST)</strong></td>
+<td style="text-align: left;">Incluye el estado completo del recurso modificado.</td>
+<td style="text-align: left;">Pesado (toda la entidad: IDs, cliente, líneas, totales)</td>
+<td style="text-align: left;">Permite al consumidor guardar su propia copia local de los datos sin volver a llamar al productor por HTTP.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Domain Event</strong></td>
+<td style="text-align: left;">Ocurre dentro del agregado de dominio (DDD).</td>
+<td style="text-align: left;">Enfocado en la regla de negocio interna</td>
+<td style="text-align: left;">Comunicación in-process entre agregados del mismo microservicio o módulo.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-patrones-arquitectonicos-clave">3. Patrones Arquitectónicos Clave</h2>
+<h3 id="31-patron-cqrs-command-query-responsibility-segregation">3.1. Patrón CQRS (Command Query Responsibility Segregation)</h3>
+<p>Separa explícitamente las operaciones que <strong>modifican datos (Commands)</strong> de las operaciones que <strong>leen datos (Queries)</strong>, permitiendo escalar y optimizar cada modelo de manera independiente:</p>
+<pre class="mermaid"><code>graph TD
+    Client[Cliente / Frontend]
+
+    subgraph "Lado de Escritura (Commands)"
+        Command[CreateOrderCommand]
+        CommandHandler[CreateOrderHandler]
+        WriteDB[(Base de Datos Transaccional - SQL / ACID)]
+    end
+
+    subgraph "Sincronización Asíncrona"
+        OutboxEvent[OrderCreatedEvent]
+        Projector[Projector Worker]
+    end
+
+    subgraph "Lado de Lectura (Queries)"
+        ReadDB[(Base de Datos de Lectura - NoSQL / Elastic / Redis)]
+        QueryHandler[GetOrderDetailsQueryHandler]
+    end
+
+    Client --&gt;|POST /orders| Command
+    Command --&gt; CommandHandler
+    CommandHandler --&gt; WriteDB
+    WriteDB -.-&gt; OutboxEvent
+    OutboxEvent --&gt; Projector
+    Projector --&gt;|Actualiza Vista Optimizada| ReadDB
+
+    Client --&gt;|GET /orders/123| QueryHandler
+    QueryHandler --&gt;|Consulta rápida desnormalizada| ReadDB</code></pre>
+<hr />
+<h3 id="32-patron-transactional-outbox">3.2. Patrón Transactional Outbox</h3>
+<p>Uno de los mayores desafíos en arquitecturas distribuidas es: <strong>¿Cómo actualizar la base de datos local y publicar un evento en el broker de forma atómica sin soporte de 2-Phase Commit (2PC)?</strong></p>
+<p>Si el broker falla después de hacer commit en la base de datos, el evento se pierde. Si el commit falla después de enviar al broker, se publican eventos fantasmas.</p>
+<p><strong>Solución con Transactional Outbox:</strong>
+1. En la <strong>misma transacción de base de datos</strong> donde guardas tu entidad, insertas un registro en una tabla auxiliar llamada <code>Outbox</code>.
+2. Un proceso en segundo plano (Worker, Debezium con CDC, o Polling) lee la tabla <code>Outbox</code> y publica los mensajes en el Message Broker.
+3. Una vez confirmado el envío por el broker, el mensaje se marca como procesado en la tabla <code>Outbox</code>.</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">-- Transacción atómica local</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">BEGIN</span><span class="w"> </span><span class="k">TRANSACTION</span><span class="p">;</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">Orders</span><span class="w"> </span><span class="p">(</span><span class="n">Id</span><span class="p">,</span><span class="w"> </span><span class="n">CustomerId</span><span class="p">,</span><span class="w"> </span><span class="n">TotalAmount</span><span class="p">,</span><span class="w"> </span><span class="n">Status</span><span class="p">)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">'9b1deb4d'</span><span class="p">,</span><span class="w"> </span><span class="s1">'cust-01'</span><span class="p">,</span><span class="w"> </span><span class="mi">150</span><span class="p">.</span><span class="mi">00</span><span class="p">,</span><span class="w"> </span><span class="s1">'Created'</span><span class="p">);</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">OutboxMessages</span><span class="w"> </span><span class="p">(</span><span class="n">Id</span><span class="p">,</span><span class="w"> </span><span class="n">OccurredOn</span><span class="p">,</span><span class="w"> </span><span class="k">Type</span><span class="p">,</span><span class="w"> </span><span class="n">Payload</span><span class="p">,</span><span class="w"> </span><span class="n">ProcessedOn</span><span class="p">)</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="n">gen_random_uuid</span><span class="p">(),</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="n">NOW</span><span class="p">(),</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="s1">'OrderCreatedIntegrationEvent'</span><span class="p">,</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="s1">'{"orderId": "9b1deb4d", "customerId": "cust-01", "total": 150.00}'</span><span class="p">,</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="k">NULL</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="p">);</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="k">COMMIT</span><span class="p">;</span>
+</span></code></pre></div>
+<hr />
+<h3 id="33-transacciones-distribuidas-el-patron-saga">3.3. Transacciones Distribuidas: El Patrón Saga</h3>
+<p>Cuando un proceso de negocio involucra múltiples microservicios (por ejemplo: <code>Crear Pedido</code> -&gt; <code>Cobrar Tarjeta</code> -&gt; <code>Reservar Inventario</code> -&gt; <code>Generar Envío</code>), no podemos usar una transacción ACID global. Se utiliza una <strong>Saga</strong>, que es una secuencia de transacciones locales coordinadas. Si un paso falla, se ejecutan <strong>transacciones compensatorias</strong> (deshacer en reversa).</p>
+<p>Existen dos estilos de Saga:</p>
+<h4 id="a-coreografia-choreography">A. Coreografía (Choreography)</h4>
+<ul>
+<li>Cada servicio publica eventos y los otros servicios reaccionan directamente.</li>
+<li><strong>Ventajas:</strong> Simple para flujos pequeños (2-3 pasos), no hay punto central de fallo.</li>
+<li><strong>Desventajas:</strong> Difícil de rastrear y depurar cuando hay más de 5 pasos ("arquitectura de espagueti de eventos").</li>
+</ul>
+<h4 id="b-orquestacion-orchestration">B. Orquestación (Orchestration)</h4>
+<ul>
+<li>Un servicio dedicado (el <strong>Saga Orchestrator</strong>) le indica explícitamente a cada servicio qué comando ejecutar y gestiona la máquina de estados.</li>
+<li><strong>Ventajas:</strong> Visibilidad centralizada del estado del flujo, manejo claro de rollbacks y timeouts.</li>
+<li><strong>Desventajas:</strong> Dependencia adicional del orquestador.</li>
+</ul>
+<hr />
+<h2 id="4-resiliencia-idempotencia-y-dead-letter-queues-dlq">4. Resiliencia: Idempotencia y Dead Letter Queues (DLQ)</h2>
+<p>En sistemas distribuidos, la garantía de entrega de los brokers suele ser <strong>At-Least-Once</strong> (al menos una vez). Esto significa que un consumidor puede recibir el mismo mensaje dos o más veces por reintentos de red.</p>
+<h3 id="idempotencia-en-el-consumidor">Idempotencia en el Consumidor</h3>
+<p>Para evitar duplicar operaciones críticas (como cobrar dos veces a una tarjeta), cada consumidor debe registrar los IDs de los mensajes procesados:</p>
+<div class="language-csharp highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="w"> </span><span class="nf">Handle</span><span class="p">(</span><span class="n">OrderPaymentRequestedEvent</span><span class="w"> </span><span class="n">message</span><span class="p">)</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p">{</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="c1">// 1. Verificar si el mensaje ya fue procesado</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="n">_inboxRepository</span><span class="p">.</span><span class="n">ExistsAsync</span><span class="p">(</span><span class="n">message</span><span class="p">.</span><span class="n">MessageId</span><span class="p">))</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">        </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">"Mensaje duplicado ignorado: {MessageId}"</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="p">.</span><span class="n">MessageId</span><span class="p">);</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">        </span><span class="k">return</span><span class="p">;</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="c1">// 2. Ejecutar la operación de negocio</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="n">_paymentGateway</span><span class="p">.</span><span class="n">ChargeAsync</span><span class="p">(</span><span class="n">message</span><span class="p">.</span><span class="n">CustomerId</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="p">.</span><span class="n">Amount</span><span class="p">);</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="c1">// 3. Registrar en la tabla Inbox para asegurar idempotencia futura</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="n">_inboxRepository</span><span class="p">.</span><span class="n">RecordProcessedAsync</span><span class="p">(</span><span class="n">message</span><span class="p">.</span><span class="n">MessageId</span><span class="p">);</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="dead-letter-queue-dlq">Dead Letter Queue (DLQ)</h3>
+<p>Cuando un mensaje no puede procesarse tras varios reintentos con <strong>Backoff Exponencial</strong> (por ejemplo, debido a datos corruptos o errores irrecuperables), no debe bloquear la cola. Se desvía automáticamente a una <strong>Cola de Mensajes Muertos (DLQ)</strong> para análisis manual y reenvío posterior (<em>replay</em>).</p>
+<hr />
+<h2 id="5-comparativa-de-message-brokers-y-event-streaming">5. Comparativa de Message Brokers y Event Streaming</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Plataforma</th>
+<th style="text-align: left;">Paradigma</th>
+<th style="text-align: left;">Modelo de Consumo</th>
+<th style="text-align: left;">Retención de Mensajes</th>
+<th style="text-align: left;">Caso de Uso Ideal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Apache Kafka</strong></td>
+<td style="text-align: left;">Log de Eventos Distribuido (<em>Event Streaming</em>)</td>
+<td style="text-align: left;">Pull (Consumer Groups con Offset)</td>
+<td style="text-align: left;">Configurable (días, meses o infinito)</td>
+<td style="text-align: left;">Telemetría, Big Data, Event Sourcing, Replay de eventos históricos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>RabbitMQ</strong></td>
+<td style="text-align: left;">Message Broker Tradicional (AMQP)</td>
+<td style="text-align: left;">Push/Pull (Colas inteligentes)</td>
+<td style="text-align: left;">Los mensajes se eliminan tras ser reconocidos (<em>ACK</em>)</td>
+<td style="text-align: left;">Enrutamiento complejo (Topics, Direct, Fanout), tareas en background, flujos RPC</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>AWS SQS + SNS</strong></td>
+<td style="text-align: left;">Cloud Managed Serverless</td>
+<td style="text-align: left;">Polling (SQS) / Fanout (SNS)</td>
+<td style="text-align: left;">Hasta 14 días</td>
+<td style="text-align: left;">Arquitecturas serverless en la nube de AWS con mantenimiento cero</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Google Cloud Pub/Sub</strong></td>
+<td style="text-align: left;">Mensajería Global Cloud-Native</td>
+<td style="text-align: left;">Push / Pull Streaming</td>
+<td style="text-align: left;">Hasta 7 días</td>
+<td style="text-align: left;">Sistemas multi-región a escala masiva sin administración de clústeres</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.path", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
