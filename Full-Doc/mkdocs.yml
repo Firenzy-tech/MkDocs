@@ -1,0 +1,6 @@
+site_name: Arquitectura
+theme:
+  name: material
+  palette:
+    primary: teal   # Color de la barra superior y enlaces
+    accent: amber   # Color de los botones y elementos interactivos
